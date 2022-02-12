@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Machinery extends Model
@@ -52,6 +53,16 @@ class Machinery extends Model
     public function maker(): BelongsTo
     {
         return $this->belongsTo(MachineryMaker::class, 'machinery_maker_id');
+    }
+
+    /**
+     * Retrieve all sub category under this machinery
+     *
+     * @return HasMany SubCategory
+     */
+    public function subCategories(): HasMany
+    {
+        return $this->hasMany(SubCategory::class);
     }
 
     /**
