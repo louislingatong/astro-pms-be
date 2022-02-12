@@ -17,5 +17,6 @@ class DatabaseSeeder extends Seeder
         $this->call(VesselsTableSeeder::class);
         $this->call(RankTypesTableSeeder::class);
         $this->call(RanksTableSeeder::class);
+        $this->call(IntervalUnitsTableSeeder::class);
     }
 }
