@@ -24,3 +24,6 @@ Route::prefix('users')
 // register vessels routes
 Route::prefix('vessels')
     ->group(base_path('routes/api/vessels.php'));
+// register machineries routes
+Route::prefix('machineries')
+    ->group(base_path('routes/api/machineries.php'));
