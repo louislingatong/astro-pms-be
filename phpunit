@@ -1,0 +1,39 @@
+#!/bin/bash
+SRC_DIR="`pwd`"
+cd "`dirname "$0"`"
+cd "vendor/bin"
+BIN_TARGET="`pwd`/phpunit"
+cd "$SRC_DIR"
+"$BIN_TARGET" "$@"
+
+# define the expected paths
+COVERAGE="$SRC_DIR/public/report"
+COVERAGE_LOGS="$SRC_DIR/public/report/logs"
+
+# add stylesheet to the xml result
+sed -i 's/<?xml version="1.0" encoding="UTF-8"?>/<?xml version="1.0" encoding="UTF-8"?>\n<?xml-stylesheet type="text\/xsl" href="logfile.xslt"?>/g' "$COVERAGE"/logfile.xml
+
+# Get the latest revision hash when the test was run
+REVISION="`git rev-parse --verify HEAD`"
+AUTHOR_NAME="`git log -1 --pretty=format:'%an'`"
+AUTHOR_EMAIL="`git log -1 --pretty=format:'%ae'`"
+
+NOW=$(date +"%Y-%m-%d %T")
+sed -i 's/<testsuites>/<testsuites>\n<revision name="'"$AUTHOR_NAME"'" email="'"$AUTHOR_EMAIL"'" hash="'"$REVISION"'" date="'"$NOW"'"\/>/g' "$COVERAGE"/logfile.xml
+
+# create log versions
+LOG_FILE="log-"$REVISION"-"$(echo $NOW | tr -d ' ' | tr -d ':' | tr -d '-')".xml"
+LOG_FILE_NAME="log-$REVISION"
+cp "$COVERAGE"/logfile.xml "$COVERAGE_LOGS"/$LOG_FILE
+#
+# verify if index.html exists, otherwise
+# create it by copying from the template.html
+if [ ! -f "$COVERAGE_LOGS"/index.html ]; then
+    cp "$COVERAGE_LOGS"/template.html "$COVERAGE_LOGS"/index.html
+fi
+
+# add the file to the HTML list
+sed -i 's/<div style="display: none;"><\/div>/<div style="display: none;"><\/div>\n<li><a href="'"$LOG_FILE"'">'"$LOG_FILE_NAME"'<\/a><span class="date">'"$NOW"'<\/a><\/li>/g' "$COVERAGE_LOGS"/index.html
+
+# remove the original log file so there is only 1 place to review history
+rm "$COVERAGE"/logfile.xml
