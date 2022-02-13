@@ -39,3 +39,6 @@ Route::prefix('vessel-machineries')
 // register vessel sub categories routes
 Route::prefix('vessel-machinery-sub-categories')
     ->group(base_path('routes/api/vessel-machinery-sub-categories.php'));
+// register running hours routes
+Route::prefix('running-hours')
+    ->group(base_path('routes/api/running-hours.php'));

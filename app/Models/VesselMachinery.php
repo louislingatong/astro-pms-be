@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class VesselMachinery extends Model
@@ -63,6 +65,28 @@ class VesselMachinery extends Model
     public function interval(): BelongsTo
     {
         return $this->belongsTo(Interval::class, 'interval_id');
+    }
+
+    /**
+     * Retrieve current running hour under this vessel machinery
+     *
+     * @return HasOne RunningHour
+     */
+    public function currentRunningHour(): HasOne
+    {
+        return $this->hasOne(RunningHour::class, 'vessel_machinery_id')
+            ->orderBy('id', 'DESC');
+    }
+
+    /**
+     * Retrieve all running hour under this vessel machinery
+     *
+     * @return HasMany RunningHour[]
+     */
+    public function runningHoursHistory(): HasMany
+    {
+        return $this->hasMany(RunningHour::class)
+            ->orderBy('id', 'DESC');
     }
 
     /**
