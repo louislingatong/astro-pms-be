@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class SubCategoryDescription extends Model
 {
@@ -18,12 +19,22 @@ class SubCategoryDescription extends Model
     ];
 
     /**
-     * Retrieves the sub category of the description
+     * Retrieves the sub category of the sub category description
      *
-     * @return BelongsTo VesselSubCategory
+     * @return BelongsTo SubCategory
      */
     public function subCategory(): BelongsTo
     {
         return $this->belongsTo(SubCategory::class, 'sub_category_id');
+    }
+
+    /**
+     * Retrieves the vessel machinery sub category under this sub category description
+     *
+     * @return HasOne VesselMachinerySubCategory
+     */
+    public function vesselMachinerySubCategory(): HasOne
+    {
+        return $this->hasOne(VesselMachinerySubCategory::class, 'sub_category_id');
     }
 }
