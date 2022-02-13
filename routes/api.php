@@ -33,3 +33,6 @@ Route::prefix('sub-categories')
 // register intervals routes
 Route::prefix('intervals')
     ->group(base_path('routes/api/intervals.php'));
+// register vessel machineries routes
+Route::prefix('vessel-machineries')
+    ->group(base_path('routes/api/vessel-machineries.php'));
