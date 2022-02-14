@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVesselMachinerySubCategoriesTable extends Migration
+class CreateVesselMchnrySubCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateVesselMachinerySubCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('vessel_machinery_sub_categories', function (Blueprint $table) {
+        Schema::create('vessel_mchnry_sub_categories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('vessel_machinery_id');
             $table->string('code')->unique();
@@ -46,6 +46,6 @@ class CreateVesselMachinerySubCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vessel_machinery_sub_categories');
+        Schema::dropIfExists('vessel_mchnry_sub_categories');
     }
 }
