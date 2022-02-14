@@ -11,12 +11,21 @@ class UpdateVesselRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'first_name' => 'required',
-            'last_name' => 'required',
+            'owner_id' => [
+                'required',
+                'exists:vessel_owners,id',
+            ],
+            'code_name' => 'required',
+            'name' => 'required',
         ];
+    }
+
+    public function getOwnerId()
+    {
+        return $this->input('owner_id', null);
     }
 
     public function getCodeName()

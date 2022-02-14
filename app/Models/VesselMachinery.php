@@ -74,7 +74,7 @@ class VesselMachinery extends Model
      */
     public function currentRunningHour(): HasOne
     {
-        return $this->hasOne(RunningHour::class, 'vessel_machinery_id')
+        return $this->HasOne(RunningHour::class, 'vessel_machinery_id')
             ->orderBy('id', 'DESC');
     }
 

@@ -8,4 +8,5 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('{interval}', 'IntervalController@read');
     Route::put('{interval}', 'IntervalController@update');
     Route::delete('{interval}', 'IntervalController@delete');
+    Route::post('/import', 'IntervalController@import');
 });

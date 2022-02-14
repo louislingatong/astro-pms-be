@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateIntervalRequest;
+use App\Http\Requests\ImportRequest;
 use App\Http\Requests\SearchIntervalRequest;
 use App\Http\Requests\UpdateIntervalRequest;
 use App\Http\Resources\IntervalResource;
+use App\Imports\IntervalImport;
 use App\Models\Interval;
 use App\Services\IntervalService;
 use Exception;
@@ -147,6 +149,35 @@ class IntervalController extends Controller
         } catch (Exception $e) {
             $this->response = [
                 'error' => $e->getMessage(),
+                'code' => 500,
+            ];
+        }
+
+        return response()->json($this->response, $this->response['code']);
+    }
+
+    /**
+     * Import interval
+     *
+     * @param ImportRequest $request
+     * @return JsonResponse
+     * @throws
+     */
+    public function import(ImportRequest $request): JsonResponse
+    {
+        $import = new IntervalImport;
+        $import->import($request->getFile());
+
+        if ($import->failures()->isNotEmpty()) {
+            $this->response = [
+                'error' => $import->failures(),
+                'code' => 422,
+            ];
+        }
+
+        if ($import->errors()->isNotEmpty()) {
+            $this->response = [
+                'error' => $import->errors(),
                 'code' => 500,
             ];
         }

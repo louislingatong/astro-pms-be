@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateSubCategoryRequest;
+use App\Http\Requests\ImportRequest;
 use App\Http\Requests\SearchSubCategoryRequest;
 use App\Http\Requests\UpdateSubCategoryRequest;
 use App\Http\Resources\SubCategoryResource;
+use App\Imports\SubCategoryImport;
 use App\Models\SubCategory;
 use App\Services\SubCategoryService;
 use Exception;
@@ -147,6 +149,35 @@ class SubCategoryController extends Controller
         } catch (Exception $e) {
             $this->response = [
                 'error' => $e->getMessage(),
+                'code' => 500,
+            ];
+        }
+
+        return response()->json($this->response, $this->response['code']);
+    }
+
+    /**
+     * Import sub category
+     *
+     * @param ImportRequest $request
+     * @return JsonResponse
+     * @throws
+     */
+    public function import(ImportRequest $request): JsonResponse
+    {
+        $import = new SubCategoryImport();
+        $import->import($request->getFile());
+
+        if ($import->failures()->isNotEmpty()) {
+            $this->response = [
+                'error' => $import->failures(),
+                'code' => 422,
+            ];
+        }
+
+        if ($import->errors()->isNotEmpty()) {
+            $this->response = [
+                'error' => $import->errors(),
                 'code' => 500,
             ];
         }

@@ -71,6 +71,7 @@ class VesselController extends Controller
 
         try {
             $formData = [
+                'vessel_owner_id' => $request->getOwnerId(),
                 'code_name' => $request->getCodeName(),
                 'name' => $request->getName(),
             ];
@@ -119,6 +120,7 @@ class VesselController extends Controller
 
         try {
             $formData = [
+                'vessel_owner_id' => $request->getOwnerId(),
                 'code_name' => $request->getCodeName(),
                 'name' => $request->getName(),
             ];

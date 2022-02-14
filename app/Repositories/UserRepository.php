@@ -77,13 +77,14 @@ class UserRepository implements UserRepositoryInterface
                 throw new InvalidUserCredentialsException;
             }
 
-            if (array_key_exists($user->status->name, $this->statusError)) {
-                /** @var UserStatus $status */
-                $status = $user->getRelation('status');
+            /** @var UserStatus $status */
+            $status = $user->getRelation('status');
+
+            if (array_key_exists($status->getAttribute('name'), $this->statusError)) {
                 throw $this->statusError[$status->getAttribute('name')];
             }
 
-            if (Hash::check($password, $user->getAttribute('password'))) {
+            if (Hash::check($password, $user->getAttribute('password')) === false) {
                 $this->updateLoginAttempts($user);
 
                 throw new InvalidUserPasswordException;

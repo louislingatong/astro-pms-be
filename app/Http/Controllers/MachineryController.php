@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateMachineryRequest;
+use App\Http\Requests\ImportRequest;
 use App\Http\Requests\SearchMachineryRequest;
 use App\Http\Requests\UpdateMachineryRequest;
 use App\Http\Resources\MachineryResource;
+use App\Imports\MachineryImport;
 use App\Models\Machinery;
 use App\Services\MachineryService;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Validators\ValidationException;
 
 class MachineryController extends Controller
 {
@@ -74,10 +78,10 @@ class MachineryController extends Controller
                 'vessel_department_id' => $request->getDepartmentId(),
                 'code_name' => $request->getCodeName(),
                 'name' => $request->getName(),
+                'model' => $request->getModel(),
+                'maker' => $request->getMaker(),
             ];
-            $model = $request->getModel();
-            $maker = $request->getMaker();
-            $machinery = $this->machineryService->create($formData, $model, $maker);
+            $machinery = $this->machineryService->create($formData);
             $this->response['data'] = new MachineryResource($machinery);
         } catch (Exception $e) {
             $this->response = [
@@ -125,10 +129,10 @@ class MachineryController extends Controller
                 'vessel_department_id' => $request->getDepartmentId(),
                 'code_name' => $request->getCodeName(),
                 'name' => $request->getName(),
+                'model' => $request->getModel(),
+                'maker' => $request->getMaker(),
             ];
-            $model = $request->getModel();
-            $maker = $request->getMaker();
-            $machinery = $this->machineryService->update($formData, $machinery, $model, $maker);
+            $machinery = $this->machineryService->update($formData, $machinery);
             $this->response['data'] = new MachineryResource($machinery);
         } catch (Exception $e) {
             $this->response = [
@@ -153,6 +157,35 @@ class MachineryController extends Controller
         } catch (Exception $e) {
             $this->response = [
                 'error' => $e->getMessage(),
+                'code' => 500,
+            ];
+        }
+
+        return response()->json($this->response, $this->response['code']);
+    }
+
+    /**
+     * Import machinery
+     *
+     * @param ImportRequest $request
+     * @return JsonResponse
+     * @throws
+     */
+    public function import(ImportRequest $request): JsonResponse
+    {
+        $import = new MachineryImport;
+        $import->import($request->getFile());
+
+        if ($import->failures()->isNotEmpty()) {
+            $this->response = [
+                'error' => $import->failures(),
+                'code' => 422,
+            ];
+        }
+
+        if ($import->errors()->isNotEmpty()) {
+            $this->response = [
+                'error' => $import->errors(),
                 'code' => 500,
             ];
         }

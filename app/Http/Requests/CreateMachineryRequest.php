@@ -14,11 +14,20 @@ class CreateMachineryRequest extends FormRequest
     public function rules()
     {
         return [
-            'department_id' => ['required', 'exists:vessel_departments,id'],
+            'department_id' => [
+                'required',
+                'exists:vessel_departments,id',
+            ],
             'code_name' => 'required',
             'name' => 'required',
-            'model' => 'nullable',
-            'maker' => 'nullable',
+            'model' => [
+                'nullable',
+                'exists:vessel_models,id',
+            ],
+            'maker' => [
+                'nullable',
+                'exists:vessel_makers,id',
+            ],
         ];
     }
 

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class VesselMachinerySubCategory extends Model
@@ -22,6 +23,13 @@ class VesselMachinerySubCategory extends Model
         'sub_category_id',
         'sub_category_description_id',
     ];
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'vessel_mchnry_sub_categories';
 
     /**
      * Retrieves the vessel machinery of the vessel sub category
@@ -51,6 +59,17 @@ class VesselMachinerySubCategory extends Model
     public function description(): BelongsTo
     {
         return $this->belongsTo(SubCategoryDescription::class, 'sub_category_description_id');
+    }
+
+    /**
+     * Retrieve all works under this vessel machinery sub category
+     *
+     * @return HasMany Work[]
+     */
+    public function works(): HasMany
+    {
+        return $this->HasMany(Work::class, 'vessel_machinery_sub_category_id')
+            ->orderBy('last_done', 'DESC');
     }
 
     /**

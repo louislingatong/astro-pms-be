@@ -23,8 +23,8 @@ class MachineryResource extends JsonResource
             'name' => $machinery->getAttribute('name'),
             'code_name' => $machinery->getAttribute('code_name'),
             'department' => new VesselDepartmentResource($machinery->department),
-            'maker' => new MachineryMakerResource($machinery->maker),
-            'model' => new MachineryModelResource($machinery->model),
+//            'maker' => $machinery->maker ?: new MachineryMakerResource($machinery->maker),
+//            'model' => $machinery->model ?: new MachineryModelResource($machinery->model),
             'sub_categories' => SubCategoryResource::collection($machinery->subCategories),
         ];
     }

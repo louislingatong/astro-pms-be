@@ -68,7 +68,7 @@ class MachineryService
         }
 
         $results = $query->skip($skip)
-            ->orderBy('id', 'DESC')
+            ->orderBy('id', 'ASC')
             ->paginate($limit);
 
         $urlParams = ['keyword' => $conditions['keyword'], 'limit' => $limit];
@@ -80,22 +80,20 @@ class MachineryService
      * Creates a new machinery in the database
      *
      * @param array $params
-     * @param mixed $model
-     * @param mixed $maker
      * @return Machinery
      * @throws
      */
-    public function create(array $params, $model, $maker): Machinery
+    public function create(array $params): Machinery
     {
         DB::beginTransaction();
 
         try {
-            if ($model) {
-                $machineryModel = $this->findOrCreateModelByName($model);
+            if (isset($params['model'])) {
+                $machineryModel = $this->findOrCreateModelByName($params['model']);
                 $params['machinery_model_id'] = $machineryModel->getAttribute('id');
             }
-            if ($maker) {
-                $machineryMaker = $this->findOrCreateMakerByName($maker);
+            if (isset($params['maker'])) {
+                $machineryMaker = $this->findOrCreateMakerByName($params['maker']);
                 $params['machinery_maker_id'] = $machineryMaker->getAttribute('id');
             }
             $machinery = $this->machinery->create($params);
@@ -115,22 +113,20 @@ class MachineryService
      *
      * @param array $params
      * @param Machinery $machinery
-     * @param mixed $model
-     * @param mixed $maker
      * @return Machinery
      * @throws
      */
-    public function update(array $params, Machinery $machinery, $model, $maker): Machinery
+    public function update(array $params, Machinery $machinery): Machinery
     {
         DB::beginTransaction();
 
         try {
-            if ($model) {
-                $machineryModel = $this->findOrCreateModelByName($model);
+            if ($params['model']) {
+                $machineryModel = $this->findOrCreateModelByName($params['model']);
                 $params['machinery_model_id'] = $machineryModel->getAttribute('id');
             }
-            if ($maker) {
-                $machineryMaker = $this->findOrCreateMakerByName($maker);
+            if ($params['maker']) {
+                $machineryMaker = $this->findOrCreateMakerByName($params['model']);
                 $params['machinery_maker_id'] = $machineryMaker->getAttribute('id');
             }
             $machinery->update($params);

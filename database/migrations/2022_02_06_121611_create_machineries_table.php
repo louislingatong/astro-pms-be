@@ -16,7 +16,7 @@ class CreateMachineriesTable extends Migration
         Schema::create('machineries', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('vessel_department_id');
-            $table->string('code_name')->unique();
+            $table->string('code_name')->nullable();
             $table->string('name');
             $table->unsignedBigInteger('machinery_model_id')->nullable();
             $table->unsignedBigInteger('machinery_maker_id')->nullable();

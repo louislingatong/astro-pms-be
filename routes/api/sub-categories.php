@@ -8,4 +8,5 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('{subCategory}', 'SubCategoryController@read');
     Route::put('{subCategory}', 'SubCategoryController@update');
     Route::delete('{subCategory}', 'SubCategoryController@delete');
+    Route::post('/import', 'SubCategoryController@import');
 });
