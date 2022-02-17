@@ -14,7 +14,7 @@ class MachineryMakerResource extends JsonResource
      * @param Request $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         /** @var MachineryMaker $maker */
         $maker = $this->resource;

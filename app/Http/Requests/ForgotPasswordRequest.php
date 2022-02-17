@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\EmailAddress;
+use App\Rules\EmailAddressRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ForgotPasswordRequest extends FormRequest
@@ -12,10 +12,13 @@ class ForgotPasswordRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'email' => ['required', new EmailAddress],
+            'email' => [
+                'required',
+                new EmailAddressRule,
+            ],
         ];
     }
 

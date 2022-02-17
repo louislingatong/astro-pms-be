@@ -15,9 +15,18 @@ class SearchWorkRequest extends FormRequest
     {
         return [
             'keyword' => 'nullable',
-            'status' => ['nullable', 'in:' . implode(',', config('job.statuses'))],
-            'page' => ['nullable', 'numeric'],
-            'limit' => ['nullable', 'numeric'],
+            'status' => [
+                'nullable',
+                'in:' . implode(',', config('job.statuses')),
+            ],
+            'page' => [
+                'nullable',
+                'numeric',
+            ],
+            'limit' => [
+                'nullable',
+                'numeric',
+            ],
         ];
     }
 

@@ -11,12 +11,18 @@ class SearchIntervalRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'keyword' => 'nullable',
-            'page' => ['nullable', 'numeric'],
-            'limit' => ['nullable', 'numeric'],
+            'page' => [
+                'nullable',
+                'numeric'
+            ],
+            'limit' => [
+                'nullable',
+                'numeric'
+            ],
         ];
     }
 

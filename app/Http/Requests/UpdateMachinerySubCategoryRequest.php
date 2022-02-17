@@ -4,17 +4,20 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateSubCategoryRequest extends FormRequest
+class UpdateMachinerySubCategoryRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'machinery_id' => ['required', 'exists:machineries,id'],
+            'machinery_id' => [
+                'required',
+                'exists:machineries,id',
+            ],
             'name' => 'required',
         ];
     }

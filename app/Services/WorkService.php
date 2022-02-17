@@ -4,9 +4,8 @@ namespace App\Services;
 
 use App\Http\Resources\VesselMachinerySubCategoryWorkResource;
 use App\Models\Interval;
-use App\Models\VesselMachinery;
-use App\Models\Work;
 use App\Models\VesselMachinerySubCategory;
+use App\Models\Work;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -18,25 +17,25 @@ class WorkService
     /** @var Work $work */
     protected $work;
 
-    /** @var VesselMachineryService $vesselMachineryService */
-    protected $vesselMachineryService;
+    /** @var VesselMachinerySubCategoryService $vesselMachinerySubCategoryService */
+    protected $vesselMachinerySubCategoryService;
 
     /**
      * WorkService constructor.
      *
      * @param VesselMachinerySubCategory $vesselSubCategory
      * @param Work $work
-     * @param VesselMachineryService $vesselMachineryService
+     * @param VesselMachinerySubCategoryService $vesselMachinerySubCategoryService
      */
     public function __construct(
         VesselMachinerySubCategory $vesselSubCategory,
         Work $work,
-        VesselMachineryService $vesselMachineryService
+        VesselMachinerySubCategoryService $vesselMachinerySubCategoryService
     )
     {
         $this->vesselSubCategory = $vesselSubCategory;
         $this->work = $work;
-        $this->vesselMachineryService = $vesselMachineryService;
+        $this->vesselMachinerySubCategoryService = $vesselMachinerySubCategoryService;
     }
 
     /**
@@ -93,14 +92,12 @@ class WorkService
             /** @var VesselMachinerySubCategory $vesselMachinerySubCategory */
             $vesselMachinerySubCategory = $work->vesselMachinerySubCategory;
             /** @var Work $lastDoneWork */
-            $lastDoneWork = $vesselMachinerySubCategory->works()->first();
-            /** @var VesselMachinery $vesselMachinery */
-            $vesselMachinery = $vesselMachinerySubCategory->vesselMachinery;
+            $lastDoneWork = $vesselMachinerySubCategory->currentWork;
             /** @var Interval $interval */
-            $interval = $vesselMachinery->interval;
+            $interval = $vesselMachinerySubCategory->interval;
 
-            $vesselMachinery->machinery()->update([
-                'due_date' => $this->vesselMachineryService->getDueDate(
+            $vesselMachinerySubCategory->update([
+                'due_date' => $this->vesselMachinerySubCategoryService->getDueDate(
                     $lastDoneWork->getAttribute('last_done'),
                     $interval
                 )

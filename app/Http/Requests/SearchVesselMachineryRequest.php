@@ -15,8 +15,14 @@ class SearchVesselMachineryRequest extends FormRequest
     {
         return [
             'keyword' => 'nullable',
-            'page' => ['nullable', 'numeric'],
-            'limit' => ['nullable', 'numeric'],
+            'page' => [
+                'nullable',
+                'numeric',
+            ],
+            'limit' => [
+                'nullable',
+                'numeric',
+            ],
         ];
     }
 

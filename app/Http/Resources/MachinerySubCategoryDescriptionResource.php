@@ -2,11 +2,11 @@
 
 namespace App\Http\Resources;
 
-use App\Models\SubCategoryDescription;
+use App\Models\MachinerySubCategoryDescription;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SubCategoryDescriptionResource extends JsonResource
+class MachinerySubCategoryDescriptionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,9 +14,9 @@ class SubCategoryDescriptionResource extends JsonResource
      * @param Request $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
-        /** @var SubCategoryDescription $description */
+        /** @var MachinerySubCategoryDescription $description */
         $description = $this->resource;
         return [
             'id' => $description->getAttribute('id'),

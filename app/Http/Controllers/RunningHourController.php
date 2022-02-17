@@ -75,7 +75,7 @@ class RunningHourController extends Controller
             $formData = [
                 'vessel_machinery_id' => $request->getVesselMachineryId(),
                 'running_hours' => $request->getRunningHours(),
-                'creator_id' => $creator->getAttribute('id')
+                'creator_id' => $creator->getAttribute('id'),
             ];
             $runningHour = $this->runningHourService->create($formData);
             $this->response['data'] = new RunningHourResource($runningHour);

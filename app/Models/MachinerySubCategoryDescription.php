@@ -4,12 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class VesselDepartment extends Model
+class MachinerySubCategoryDescription extends Model
 {
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'machinery_sub_category_id',
+        'name'
+    ];
 }

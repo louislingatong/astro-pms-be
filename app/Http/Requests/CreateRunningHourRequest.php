@@ -11,11 +11,17 @@ class CreateRunningHourRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'vessel_machinery_id' => ['required', 'exists:vessel_machineries,id'],
-            'running_hours' => ['required', 'numeric'],
+            'vessel_machinery_id' => [
+                'required',
+                'exists:vessel_machineries,id',
+            ],
+            'running_hours' => [
+                'required',
+                'numeric',
+            ],
         ];
     }
 

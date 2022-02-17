@@ -13,7 +13,7 @@ class CreateUserRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'first_name' => 'required',

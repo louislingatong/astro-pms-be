@@ -11,19 +11,24 @@ class UpdateVesselMachinerySubCategoryRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'vessel_machinery_id' => ['required', 'exists:vessel_machineries,id'],
             'code' => 'required',
-            'sub_category_id' => ['required', 'exists:sub_categories,id'],
-            'description' => 'nullable'
+            'description' => 'nullable',
+            'interval_id' => [
+                'required',
+                'exists:intervals,id',
+            ],
+            'vessel_machinery_id' => [
+                'required',
+                'exists:vessel_machineries,id',
+            ],
+            'machinery_sub_category_id' => [
+                'required',
+                'exists:machinery_sub_categories,id',
+            ],
         ];
-    }
-
-    public function getVesselMachineryId()
-    {
-        return $this->input('vessel_machinery_id', null);
     }
 
     public function getCode()
@@ -31,13 +36,23 @@ class UpdateVesselMachinerySubCategoryRequest extends FormRequest
         return $this->input('code', null);
     }
 
-    public function getSubCategoryId()
-    {
-        return $this->input('sub_category_id', null);
-    }
-
     public function getDescription()
     {
         return $this->input('description', null);
+    }
+
+    public function getIntervalId()
+    {
+        return $this->input('interval_id', null);
+    }
+
+    public function getVesselMachineryId()
+    {
+        return $this->input('vessel_machinery_id', null);
+    }
+
+    public function getMachinerySubCategoryId()
+    {
+        return $this->input(' machinery_sub_category_id', null);
     }
 }

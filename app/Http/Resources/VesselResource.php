@@ -20,6 +20,7 @@ class VesselResource extends JsonResource
         $vessel = $this->resource;
         return [
             'id' => $vessel->getAttribute('id'),
+            'code_name' => $vessel->getAttribute('code_name'),
             'name' => $vessel->getAttribute('name'),
             'owner' => new VesselOwnerResource($vessel->owner),
         ];

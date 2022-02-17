@@ -74,9 +74,9 @@ class WorkController extends Controller
 
         try {
             $formData = [
-                'vessel_sub_category_id' => $request->getVesselSubCategoryId(),
+                'vessel_machinery_sub_category_id' => $request->getVesselMachinerySubCategoryId(),
                 'last_done' => $request->getLastDone(),
-                'running_hours' => $request->getInstructions(),
+                'instructions' => $request->getInstructions(),
                 'remarks' => $request->getRemarks(),
                 'creator_id' => $creator->getAttribute('id')
             ];

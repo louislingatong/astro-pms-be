@@ -16,11 +16,9 @@ class CreateVesselMachineriesTable extends Migration
         Schema::create('vessel_machineries', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamp('installed_date');
-            $table->timestamp('due_date');
             $table->unsignedBigInteger('vessel_id');
             $table->unsignedBigInteger('machinery_id');
             $table->unsignedBigInteger('incharge_rank_id');
-            $table->unsignedBigInteger('interval_id');
             $table->timestamps();
             $table->softDeletes();
 
@@ -35,10 +33,6 @@ class CreateVesselMachineriesTable extends Migration
             $table->foreign('incharge_rank_id')
                 ->references('id')
                 ->on('ranks')
-                ->onDelete('cascade');
-            $table->foreign('interval_id')
-                ->references('id')
-                ->on('intervals')
                 ->onDelete('cascade');
         });
     }

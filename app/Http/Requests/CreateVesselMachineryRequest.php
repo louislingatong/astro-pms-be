@@ -11,14 +11,26 @@ class CreateVesselMachineryRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'installed_date' => ['required', 'date', 'date_format:d-M-Y'],
-            'vessel_id' => ['required', 'exists:vessels,id'],
-            'machinery_id' => ['required', 'exists:machineries,id'],
-            'incharge_rank_id' => ['required', 'exists:ranks,id'],
-            'interval_id' => ['required', 'exists:intervals,id'],
+            'installed_date' => [
+                'required',
+                'date',
+                'date_format:d-M-Y',
+            ],
+            'vessel_id' => [
+                'required',
+                'exists:vessels,id',
+            ],
+            'machinery_id' => [
+                'required',
+                'exists:machineries,id',
+            ],
+            'incharge_rank_id' => [
+                'required',
+                'exists:ranks,id',
+            ],
         ];
     }
 
@@ -40,10 +52,5 @@ class CreateVesselMachineryRequest extends FormRequest
     public function getInchargeRankId()
     {
         return $this->input('incharge_rank_id', null);
-    }
-
-    public function getIntervalId()
-    {
-        return $this->input('interval_id', null);
     }
 }

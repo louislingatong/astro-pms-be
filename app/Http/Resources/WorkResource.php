@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Work;
 use App\Models\User;
+use App\Models\Work;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -16,17 +16,17 @@ class WorkResource extends JsonResource
      * @param Request $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
-        /** @var Work $job */
-        $job = $this->resource;
+        /** @var Work $work */
+        $work = $this->resource;
         /** @var User $creator */
-        $creator = $job->creator;
+        $creator = $work->creator;
         return [
-            'id' => $job->getAttribute('id'),
-            'instructions' => $job->getAttribute('instructions'),
-            'remarks' => $job->getAttribute('remarks'),
-            'created_at' => Carbon::create($job->getAttribute('created_at'))->format('d-M-Y'),
+            'id' => $work->getAttribute('id'),
+            'instructions' => $work->getAttribute('instructions'),
+            'remarks' => $work->getAttribute('remarks'),
+            'created_at' => Carbon::create($work->getAttribute('created_at'))->format('d-M-Y'),
             'creator' => $creator->getAttribute('full_name'),
         ];
     }

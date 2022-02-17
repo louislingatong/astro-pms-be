@@ -127,7 +127,6 @@ class UserController extends Controller
                 'last_name' => $request->getLastName(),
                 'email' => $request->getEmail(),
                 'password' => $request->getPassword(),
-                'avatar' => $request->getAvatar(),
             ];
             $user = $this->userService->update($formData, $user);
             $this->response['data'] = new UserResource($user);

@@ -14,7 +14,7 @@ class MachineryResource extends JsonResource
      * @param Request $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         /** @var Machinery $machinery */
         $machinery = $this->resource;
@@ -23,9 +23,9 @@ class MachineryResource extends JsonResource
             'name' => $machinery->getAttribute('name'),
             'code_name' => $machinery->getAttribute('code_name'),
             'department' => new VesselDepartmentResource($machinery->department),
-//            'maker' => $machinery->maker ?: new MachineryMakerResource($machinery->maker),
-//            'model' => $machinery->model ?: new MachineryModelResource($machinery->model),
-            'sub_categories' => SubCategoryResource::collection($machinery->subCategories),
+            'model' => $machinery->model ?: new MachineryModelResource($machinery->model),
+            'maker' => $machinery->maker ?: new MachineryMakerResource($machinery->maker),
+            'sub_categories' => MachinerySubCategoryResource::collection($machinery->subCategories),
         ];
     }
 }

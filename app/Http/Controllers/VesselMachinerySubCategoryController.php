@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateVesselMachinerySubCategoryRequest;
-use App\Http\Requests\SearchSubCategoryRequest;
+use App\Http\Requests\SearchMachinerySubCategoryRequest;
 use App\Http\Requests\UpdateVesselMachinerySubCategoryRequest;
 use App\Http\Resources\VesselMachinerySubCategoryResource;
 use App\Models\VesselMachinerySubCategory;
@@ -34,10 +34,10 @@ class VesselMachinerySubCategoryController extends Controller
     /**
      * Retrieves the List of vessel machinery sub category
      *
-     * @param SearchSubCategoryRequest $request
+     * @param SearchMachinerySubCategoryRequest $request
      * @return JsonResponse
      */
-    public function index(SearchSubCategoryRequest $request): JsonResponse
+    public function index(SearchMachinerySubCategoryRequest $request): JsonResponse
     {
         $request->validated();
 
@@ -72,9 +72,10 @@ class VesselMachinerySubCategoryController extends Controller
 
         try {
             $formData = [
-                'vessel_machinery_id' => $request->getVesselMachineryId(),
                 'code' => $request->getCode(),
-                'sub_category_id' => $request->getSubCategoryId(),
+                'interval_id' => $request->getIntervalId(),
+                'vessel_machinery_id' => $request->getVesselMachineryId(),
+                'machinery_sub_category_id' => $request->getMachinerySubCategoryId(),
                 'description' => $request->getDescription(),
             ];
             $subCategory = $this->vesselMachinerySubCategoryService->create($formData);
@@ -125,9 +126,10 @@ class VesselMachinerySubCategoryController extends Controller
 
         try {
             $formData = [
-                'vessel_machinery_id' => $request->getVesselMachineryId(),
                 'code' => $request->getCode(),
-                'sub_category_id' => $request->getSubCategoryId(),
+                'interval_id' => $request->getIntervalId(),
+                'vessel_machinery_id' => $request->getVesselMachineryId(),
+                'machinery_sub_category_id' => $request->getMachinerySubCategoryId(),
                 'description' => $request->getDescription(),
             ];
             $subCategory = $this->vesselMachinerySubCategoryService->update($formData, $vesselMachinerySubCategory);

@@ -20,11 +20,9 @@ class VesselMachinery extends Model
      */
     protected $fillable = [
         'installed_date',
-        'due_date',
         'vessel_id',
         'machinery_id',
         'incharge_rank_id',
-        'interval_id',
     ];
 
     /**
@@ -58,13 +56,13 @@ class VesselMachinery extends Model
     }
 
     /**
-     * Retrieves the interval of the vessel machinery
+     * Retrieve all vessel sub categories under this vessel machinery
      *
-     * @return BelongsTo Interval
+     * @return HasMany MachinerySubCategory[]
      */
-    public function interval(): BelongsTo
+    public function subCategories(): HasMany
     {
-        return $this->belongsTo(Interval::class, 'interval_id');
+        return $this->hasMany(VesselMachinerySubCategory::class);
     }
 
     /**

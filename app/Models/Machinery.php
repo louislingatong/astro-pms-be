@@ -6,13 +6,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Machinery extends Model
 {
-    use SoftDeletes;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -23,8 +20,10 @@ class Machinery extends Model
         'code_name',
         'name',
         'machinery_model_id',
-        'machinery_maker_id'
+        'machinery_maker_id',
     ];
+
+    use SoftDeletes;
 
     /**
      * Retrieves the department of the machinery
@@ -59,21 +58,11 @@ class Machinery extends Model
     /**
      * Retrieve all sub category under this machinery
      *
-     * @return HasMany SubCategory
+     * @return HasMany MachinerySubCategory[]
      */
     public function subCategories(): HasMany
     {
-        return $this->hasMany(SubCategory::class);
-    }
-
-    /**
-     * Retrieves the vessel machinery under this machinery
-     *
-     * @return HasOne VesselMachinery
-     */
-    public function vesselMachinery(): HasOne
-    {
-        return $this->hasOne(VesselMachinery::class, 'machinery_id');
+        return $this->hasMany(MachinerySubCategory::class);
     }
 
     /**
@@ -87,13 +76,13 @@ class Machinery extends Model
     {
         return $query->where('code_name', 'LIKE', "%$keyword%")
             ->orWhere('name', 'LIKE', "%$keyword%")
+            ->orWhereHas('department', function ($q) use ($keyword) {
+                $q->where('name', 'LIKE', "%$keyword%");
+            })
             ->orWhereHas('model', function ($q) use ($keyword) {
                 $q->where('name', 'LIKE', "%$keyword%");
             })
             ->orWhereHas('maker', function ($q) use ($keyword) {
-                $q->where('name', 'LIKE', "%$keyword%");
-            })
-            ->orWhereHas('department', function ($q) use ($keyword) {
                 $q->where('name', 'LIKE', "%$keyword%");
             });
     }

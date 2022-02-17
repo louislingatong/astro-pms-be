@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MachineryMaker extends Model
 {
@@ -13,14 +12,4 @@ class MachineryMaker extends Model
      * @var array
      */
     protected $fillable = ['name'];
-
-    /**
-     * Retrieve all machineries under this maker
-     *
-     * @return HasMany Machinery[]
-     */
-    public function machineries(): HasMany
-    {
-        return $this->hasMany(Machinery::class);
-    }
 }

@@ -14,7 +14,7 @@ class IntervalUnitResource extends JsonResource
      * @param Request $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         /** @var IntervalUnit $unit */
         $unit = $this->resource;

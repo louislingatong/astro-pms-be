@@ -14,7 +14,7 @@ class MachineryModelResource extends JsonResource
      * @param Request $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         /** @var MachineryModel $model */
         $model = $this->resource;

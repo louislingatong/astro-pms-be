@@ -11,10 +11,13 @@ class UpdateMachineryRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'department_id' => ['required', 'exists:vessel_departments,id'],
+            'department_id' => [
+                'required',
+                'exists:vessel_departments,id',
+            ],
             'code_name' => 'required',
             'name' => 'required',
             'model' => 'nullable',

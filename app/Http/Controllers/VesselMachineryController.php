@@ -76,7 +76,6 @@ class VesselMachineryController extends Controller
                 'vessel_id' => $request->getVesselId(),
                 'machinery_id' => $request->getMachineryId(),
                 'incharge_rank_id' => $request->getInchargeRankId(),
-                'interval_id' => $request->getIntervalId(),
             ];
             $vesselMachinery = $this->vesselMachineryService->create($formData);
             $this->response['data'] = new VesselMachineryResource($vesselMachinery);
@@ -127,7 +126,6 @@ class VesselMachineryController extends Controller
                 'vessel_id' => $request->getVesselId(),
                 'machinery_id' => $request->getMachineryId(),
                 'incharge_rank_id' => $request->getInchargeRankId(),
-                'interval_id' => $request->getIntervalId(),
             ];
             $vesselMachinery = $this->vesselMachineryService->update($formData, $vesselMachinery);
             $this->response['data'] = new VesselMachineryResource($vesselMachinery);

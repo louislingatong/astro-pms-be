@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class VesselMachinerySubCategory extends Model
@@ -18,18 +19,23 @@ class VesselMachinerySubCategory extends Model
      * @var array
      */
     protected $fillable = [
-        'vessel_machinery_id',
         'code',
-        'sub_category_id',
-        'sub_category_description_id',
+        'due_date',
+        'interval_id',
+        'vessel_machinery_id',
+        'machinery_sub_category_id',
+        'machinery_sub_category_description_id',
     ];
 
     /**
-     * The table associated with the model.
+     * Retrieves the interval of the vessel machinery
      *
-     * @var string
+     * @return BelongsTo Interval
      */
-    protected $table = 'vessel_mchnry_sub_categories';
+    public function interval(): BelongsTo
+    {
+        return $this->belongsTo(Interval::class, 'interval_id');
+    }
 
     /**
      * Retrieves the vessel machinery of the vessel sub category
@@ -44,21 +50,32 @@ class VesselMachinerySubCategory extends Model
     /**
      * Retrieves the sub category of the vessel sub category
      *
-     * @return BelongsTo SubCategory
+     * @return BelongsTo MachinerySubCategory
      */
     public function subCategory(): BelongsTo
     {
-        return $this->belongsTo(SubCategory::class, 'sub_category_id');
+        return $this->belongsTo(MachinerySubCategory::class, 'machinery_sub_category_id');
     }
 
     /**
      * Retrieves the description of the vessel sub category
      *
-     * @return BelongsTo SubCategoryDescription
+     * @return BelongsTo MachinerySubCategoryDescription
      */
     public function description(): BelongsTo
     {
-        return $this->belongsTo(SubCategoryDescription::class, 'sub_category_description_id');
+        return $this->belongsTo(MachinerySubCategoryDescription::class, 'machinery_sub_category_description_id');
+    }
+
+    /**
+     * Retrieve current work under this vessel machinery sub category
+     *
+     * @return HasOne Work
+     */
+    public function currentWork(): HasOne
+    {
+        return $this->HasOne(Work::class, 'vessel_machinery_sub_category_id')
+            ->orderBy('id', 'DESC');
     }
 
     /**
@@ -66,7 +83,7 @@ class VesselMachinerySubCategory extends Model
      *
      * @return HasMany Work[]
      */
-    public function works(): HasMany
+    public function worksHistory(): HasMany
     {
         return $this->HasMany(Work::class, 'vessel_machinery_sub_category_id')
             ->orderBy('last_done', 'DESC');

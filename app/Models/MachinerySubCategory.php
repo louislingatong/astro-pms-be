@@ -4,11 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class SubCategory extends Model
+class MachinerySubCategory extends Model
 {
     use SoftDeletes;
 
@@ -23,23 +22,13 @@ class SubCategory extends Model
     ];
 
     /**
-     * Retrieves the machinery of the sub category
-     *
-     * @return BelongsTo Machinery
-     */
-    public function machinery(): BelongsTo
-    {
-        return $this->belongsTo(Machinery::class, 'machinery_id');
-    }
-
-    /**
      * Retrieve all descriptions under this sub category
      *
-     * @return HasMany SubCategoryDescription[]
+     * @return HasMany MachinerySubCategoryDescription[]
      */
     public function descriptions(): HasMany
     {
-        return $this->hasMany(SubCategoryDescription::class);
+        return $this->hasMany(MachinerySubCategoryDescription::class);
     }
 
     /**

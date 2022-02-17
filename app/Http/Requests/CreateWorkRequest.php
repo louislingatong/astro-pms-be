@@ -14,16 +14,23 @@ class CreateWorkRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'vessel_sub_category_id' => ['required', 'exists:vessel_sub_categories,id'],
-            'last_done' => ['required', 'date', 'date_format:d-M-Y'],
+            'vessel_machinery_sub_category_id' => [
+                'required',
+                'exists:vessel_machinery_sub_categories,id',
+            ],
+            'last_done' => [
+                'required',
+                'date',
+                'date_format:d-M-Y',
+            ],
             'instructions' => 'nullable',
             'remarks' => 'nullable',
         ];
     }
 
-    public function getVesselSubCategoryId()
+    public function getVesselMachinerySubCategoryId()
     {
-        return $this->input('vessel_sub_category_id', null);
+        return $this->input('vessel_machinery_sub_category_id', null);
     }
 
     public function getLastDone()

@@ -11,10 +11,13 @@ class CreateIntervalRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'unit_id' => ['required', 'exists:interval_units,id'],
+            'unit_id' => [
+                'required',
+                'exists:interval_units,id',
+            ],
             'value' => 'required',
         ];
     }

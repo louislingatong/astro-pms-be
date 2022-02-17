@@ -57,16 +57,6 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Retrieves all activation tokens of the user
-     *
-     * @return HasMany ActivationToken
-     */
-    public function activationTokens(): HasMany
-    {
-        return $this->hasMany(ActivationToken::class);
-    }
-
-    /**
      * Retrieves the status of the user
      *
      * @return BelongsTo UserStatus
@@ -74,6 +64,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function status(): BelongsTo
     {
         return $this->belongsTo(UserStatus::class, 'user_status_id');
+    }
+
+    /**
+     * Retrieves all activation tokens of the user
+     *
+     * @return HasMany ActivationToken
+     */
+    public function activationTokens(): HasMany
+    {
+        return $this->hasMany(ActivationToken::class);
     }
 
     /**

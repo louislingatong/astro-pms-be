@@ -4,8 +4,12 @@ namespace App\Services;
 
 use App\Exceptions\VesselMachinerySubCategoryNotFoundException;
 use App\Http\Resources\VesselMachinerySubCategoryResource;
-use App\Models\SubCategoryDescription;
+use App\Models\Interval;
+use App\Models\IntervalUnit;
+use App\Models\MachinerySubCategoryDescription;
+use App\Models\VesselMachinery;
 use App\Models\VesselMachinerySubCategory;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -14,18 +18,18 @@ class VesselMachinerySubCategoryService
     /** @var VesselMachinerySubCategory $vesselMachinerySubCategory */
     protected $vesselMachinerySubCategory;
 
-    /** @var SubCategoryDescription $description */
+    /** @var MachinerySubCategoryDescription $description */
     protected $description;
 
     /**
      * VesselMachinerySubCategoryService constructor.
      *
      * @param VesselMachinerySubCategory $vesselMachinerySubCategory
-     * @param SubCategoryDescription $description
+     * @param MachinerySubCategoryDescription $description
      */
     public function __construct(
         VesselMachinerySubCategory $vesselMachinerySubCategory,
-        SubCategoryDescription $description
+        MachinerySubCategoryDescription $description
     )
     {
         $this->vesselMachinerySubCategory = $vesselMachinerySubCategory;
@@ -81,12 +85,17 @@ class VesselMachinerySubCategoryService
         DB::beginTransaction();
 
         try {
+            /** @var VesselMachinery $vesselMachinery */
+            $vesselMachinery = VesselMachinery::find($params['vessel_machinery_id']);
+            $interval = Interval::find($params['interval_id']);
+            $params['due_date'] = $this->getDueDate($vesselMachinery->getAttribute('installed_date'), $interval);
+
             if ($params['description']) {
                 $this->description = $this->description->firstOrCreate(['name' => $params['description']]);
             }
 
             if ($this->description->getAttribute('id')) {
-                $params['sub_category_description_id'] = $this->description->getAttribute('id');
+                $params['machinery_sub_category_description_id'] = $this->description->getAttribute('id');
             }
 
             /** @var VesselMachinerySubCategory $vesselSubCategory */
@@ -115,12 +124,17 @@ class VesselMachinerySubCategoryService
         DB::beginTransaction();
 
         try {
+            /** @var VesselMachinery $vesselMachinery */
+            $vesselMachinery = VesselMachinery::find($params['vessel_machinery_id']);
+            $interval = Interval::find($params['interval_id']);
+            $params['due_date'] = $this->getDueDate($vesselMachinery->getAttribute('installed_date'), $interval);
+
             if ($params['description']) {
                 $this->description = $this->description->firstOrCreate(['name' => $params['description']]);
             }
 
             if ($this->description->getAttribute('id')) {
-                $params['sub_category_description_id'] = $this->description->getAttribute('id');
+                $params['machinery_sub_category_description_id'] = $this->description->getAttribute('id');
             }
 
             $vesselMachinerySubCategory->update($params);
@@ -147,5 +161,38 @@ class VesselMachinerySubCategoryService
         }
         $vesselMachinerySubCategory->delete();
         return true;
+    }
+
+    /**
+     * Get the job due date
+     *
+     * @param string $date
+     * @param Interval $interval
+     * @return Carbon
+     */
+    public function getDueDate(string $date, Interval $interval): Carbon
+    {
+        $dueDate = Carbon::create($date);
+
+        /** @var IntervalUnit $intervalUnit */
+        $intervalUnit = $interval->unit;
+        switch ($intervalUnit->getAttribute('name')) {
+            case config('interval.units.daily'):
+                $dueDate->addDay();
+                break;
+            case config('interval.units.hours'):
+                $dueDate->addHours($interval->getAttribute('value'));
+                break;
+            case config('interval.units.weeks'):
+                $dueDate->addWeeks($interval->getAttribute('value'));
+                break;
+            case config('interval.units.months'):
+                $dueDate->addMonths($interval->getAttribute('value'));
+                break;
+            case config('interval.units.years'):
+                $dueDate->addYears($interval->getAttribute('value'));
+                break;
+        }
+        return $dueDate;
     }
 }

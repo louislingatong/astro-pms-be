@@ -13,13 +13,20 @@ class UpdateUserRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'first_name' => 'required',
             'last_name' => 'required',
-            'email' => ['required', new EmailAddressRule, 'unique:users,email,' . $this->getId() . ',id'],
-            'password' => ['nullable', new PasswordRule],
+            'email' => [
+                'required',
+                new EmailAddressRule,
+                'unique:users,email,' . $this->getId() . ',id',
+            ],
+            'password' => [
+                'nullable',
+                new PasswordRule,
+            ],
         ];
     }
 

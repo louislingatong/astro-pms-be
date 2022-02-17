@@ -65,15 +65,15 @@ return [
     'ipv6' => 'The :attribute must be a valid IPv6 address.',
     'json' => 'The :attribute must be a valid JSON string.',
     'lt' => [
-        'numeric' => 'The :attribute must be less than :value.',
-        'file' => 'The :attribute must be less than :value kilobytes.',
-        'string' => 'The :attribute must be less than :value characters.',
-        'array' => 'The :attribute must have less than :value items.',
+        'numeric' => 'The :attribute must be scss than :value.',
+        'file' => 'The :attribute must be scss than :value kilobytes.',
+        'string' => 'The :attribute must be scss than :value characters.',
+        'array' => 'The :attribute must have scss than :value items.',
     ],
     'lte' => [
-        'numeric' => 'The :attribute must be less than or equal :value.',
-        'file' => 'The :attribute must be less than or equal :value kilobytes.',
-        'string' => 'The :attribute must be less than or equal :value characters.',
+        'numeric' => 'The :attribute must be scss than or equal :value.',
+        'file' => 'The :attribute must be scss than or equal :value kilobytes.',
+        'string' => 'The :attribute must be scss than or equal :value characters.',
         'array' => 'The :attribute must not have more than :value items.',
     ],
     'max' => [

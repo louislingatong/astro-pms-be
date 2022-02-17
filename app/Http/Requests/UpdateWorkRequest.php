@@ -14,7 +14,10 @@ class UpdateWorkRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'vessel_sub_category_id' => ['required', 'exists:vessel_sub_categories,id'],
+            'vessel_sub_category_id' => [
+                'required',
+                'exists:vessel_sub_categories,id',
+            ],
             'instructions' => 'required',
             'remarks' => 'required',
         ];

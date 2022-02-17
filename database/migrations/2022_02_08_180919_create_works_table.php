@@ -15,7 +15,7 @@ class CreateWorksTable extends Migration
     {
         Schema::create('works', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('vessel_sub_category_id');
+            $table->unsignedBigInteger('vessel_machinery_sub_category_id');
             $table->timestamp('last_done');
             $table->string('instructions')->nullable();
             $table->string('remarks')->nullable();
@@ -23,9 +23,9 @@ class CreateWorksTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('vessel_sub_category_id')
+            $table->foreign('vessel_machinery_sub_category_id')
                 ->references('id')
-                ->on('vessel_mchnry_sub_categories')
+                ->on('vessel_machinery_sub_categories')
                 ->onDelete('cascade');
             $table->foreign('creator_id')
                 ->references('id')

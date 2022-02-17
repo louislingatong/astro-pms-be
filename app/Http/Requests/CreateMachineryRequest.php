@@ -11,7 +11,7 @@ class CreateMachineryRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'department_id' => [
@@ -20,14 +20,8 @@ class CreateMachineryRequest extends FormRequest
             ],
             'code_name' => 'required',
             'name' => 'required',
-            'model' => [
-                'nullable',
-                'exists:vessel_models,id',
-            ],
-            'maker' => [
-                'nullable',
-                'exists:vessel_makers,id',
-            ],
+            'model' => 'nullable',
+            'maker' => 'nullable',
         ];
     }
 

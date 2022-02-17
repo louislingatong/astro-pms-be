@@ -2,28 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateSubCategoryRequest;
+use App\Http\Requests\CreateMachinerySubCategoryRequest;
 use App\Http\Requests\ImportRequest;
-use App\Http\Requests\SearchSubCategoryRequest;
-use App\Http\Requests\UpdateSubCategoryRequest;
-use App\Http\Resources\SubCategoryResource;
-use App\Imports\SubCategoryImport;
-use App\Models\SubCategory;
-use App\Services\SubCategoryService;
+use App\Http\Requests\SearchMachinerySubCategoryRequest;
+use App\Http\Requests\UpdateMachinerySubCategoryRequest;
+use App\Http\Resources\MachinerySubCategoryResource;
+use App\Imports\MachinerySubCategoryImport;
+use App\Models\MachinerySubCategory;
+use App\Services\MachinerySubCategoryService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
-class SubCategoryController extends Controller
+class MachinerySubCategoryController extends Controller
 {
-    /** @var SubCategoryService */
+    /** @var MachinerySubCategoryService */
     protected $subCategoryService;
 
     /**
-     * SubCategoryController constructor
+     * MachinerySubCategoryController constructor
      *
-     * @param SubCategoryService $subCategoryService
+     * @param MachinerySubCategoryService $subCategoryService
      */
-    public function __construct(SubCategoryService $subCategoryService)
+    public function __construct(MachinerySubCategoryService $subCategoryService)
     {
         parent::__construct();
 
@@ -34,12 +34,12 @@ class SubCategoryController extends Controller
     }
 
     /**
-     * Retrieves the List of sub category
+     * Retrieves the List of machinery sub category
      *
-     * @param SearchSubCategoryRequest $request
+     * @param SearchMachinerySubCategoryRequest $request
      * @return JsonResponse
      */
-    public function index(SearchSubCategoryRequest $request): JsonResponse
+    public function index(SearchMachinerySubCategoryRequest $request): JsonResponse
     {
         $request->validated();
 
@@ -62,12 +62,12 @@ class SubCategoryController extends Controller
     }
 
     /**
-     * Creates a new sub category. Creator must be authenticated.
+     * Creates a new machinery sub category. Creator must be authenticated.
      *
-     * @param CreateSubCategoryRequest $request
+     * @param CreateMachinerySubCategoryRequest $request
      * @return JsonResponse
      */
-    public function create(CreateSubCategoryRequest $request): JsonResponse
+    public function create(CreateMachinerySubCategoryRequest $request): JsonResponse
     {
         $request->validated();
 
@@ -77,7 +77,7 @@ class SubCategoryController extends Controller
                 'name' => $request->getName(),
             ];
             $subCategory = $this->subCategoryService->create($formData);
-            $this->response['data'] = new SubCategoryResource($subCategory);
+            $this->response['data'] = new MachinerySubCategoryResource($subCategory);
         } catch (Exception $e) {
             $this->response = [
                 'error' => $e->getMessage(),
@@ -89,15 +89,15 @@ class SubCategoryController extends Controller
     }
 
     /**
-     * Retrieves sub category information
+     * Retrieves machinery sub category information
      *
-     * @param SubCategory $subCategory
+     * @param MachinerySubCategory $subCategory
      * @return JsonResponse
      */
-    public function read(SubCategory $subCategory): JsonResponse
+    public function read(MachinerySubCategory $subCategory): JsonResponse
     {
         try {
-            $this->response['data'] = new SubCategoryResource($subCategory);
+            $this->response['data'] = new MachinerySubCategoryResource($subCategory);
         } catch (Exception $e) {
             $this->response = [
                 'error' => $e->getMessage(),
@@ -109,13 +109,16 @@ class SubCategoryController extends Controller
     }
 
     /**
-     * Updates sub category information
+     * Updates machinery sub category information
      *
-     * @param UpdateSubCategoryRequest $request
-     * @param SubCategory $subCategory
+     * @param UpdateMachinerySubCategoryRequest $request
+     * @param MachinerySubCategory $subCategory
      * @return JsonResponse
      */
-    public function update(UpdateSubCategoryRequest $request, SubCategory $subCategory): JsonResponse
+    public function update(
+        UpdateMachinerySubCategoryRequest $request,
+        MachinerySubCategory $subCategory
+    ): JsonResponse
     {
         $request->validated();
 
@@ -125,7 +128,7 @@ class SubCategoryController extends Controller
                 'name' => $request->getName(),
             ];
             $subCategory = $this->subCategoryService->update($formData, $subCategory);
-            $this->response['data'] = new SubCategoryResource($subCategory);
+            $this->response['data'] = new MachinerySubCategoryResource($subCategory);
         } catch (Exception $e) {
             $this->response = [
                 'error' => $e->getMessage(),
@@ -137,12 +140,12 @@ class SubCategoryController extends Controller
     }
 
     /**
-     * Delete sub category
+     * Delete machinery sub category
      *
-     * @param SubCategory $subCategory
+     * @param MachinerySubCategory $subCategory
      * @return JsonResponse
      */
-    public function delete(SubCategory $subCategory): JsonResponse
+    public function delete(MachinerySubCategory $subCategory): JsonResponse
     {
         try {
             $this->response['deleted'] = $this->subCategoryService->delete($subCategory);
@@ -157,7 +160,7 @@ class SubCategoryController extends Controller
     }
 
     /**
-     * Import sub category
+     * Import machinery sub category
      *
      * @param ImportRequest $request
      * @return JsonResponse
@@ -165,7 +168,7 @@ class SubCategoryController extends Controller
      */
     public function import(ImportRequest $request): JsonResponse
     {
-        $import = new SubCategoryImport();
+        $import = new MachinerySubCategoryImport();
         $import->import($request->getFile());
 
         if ($import->failures()->isNotEmpty()) {

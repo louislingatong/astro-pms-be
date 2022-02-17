@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class MachineryModel extends Model
 {
@@ -13,14 +12,4 @@ class MachineryModel extends Model
      * @var array
      */
     protected $fillable = ['name'];
-
-    /**
-     * Retrieves the machinery under this model
-     *
-     * @return HasOne Machinery
-     */
-    public function machinery(): HasOne
-    {
-        return $this->hasOne(Machinery::class, 'machinery_model_id');
-    }
 }

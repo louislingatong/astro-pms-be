@@ -3,28 +3,28 @@
 namespace App\Services;
 
 use App\Exceptions\SubCategoryNotFoundException;
-use App\Http\Resources\SubCategoryResource;
-use App\Models\SubCategory;
+use App\Http\Resources\MachinerySubCategoryResource;
+use App\Models\MachinerySubCategory;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
-class SubCategoryService
+class MachinerySubCategoryService
 {
-    /** @var SubCategory $subCategory */
+    /** @var MachinerySubCategory $subCategory */
     protected $subCategory;
 
     /**
-     * SubCategoryService constructor.
+     * MachinerySubCategoryService constructor.
      *
-     * @param SubCategory $subCategory
+     * @param MachinerySubCategory $subCategory
      */
-    public function __construct(SubCategory $subCategory)
+    public function __construct(MachinerySubCategory $subCategory)
     {
         $this->subCategory = $subCategory;
     }
 
     /**
-     * List of sub category by conditions
+     * List of machinery sub category by conditions
      *
      * @param array $conditions
      * @return array
@@ -57,17 +57,17 @@ class SubCategoryService
 
         $urlParams = ['keyword' => $conditions['keyword'], 'limit' => $limit];
 
-        return paginated($results, SubCategoryResource::class, $page, $urlParams);
+        return paginated($results, MachinerySubCategoryResource::class, $page, $urlParams);
     }
 
     /**
-     * Creates a new sub category in the database
+     * Creates a new machinery sub category in the database
      *
      * @param array $params
-     * @return SubCategory
+     * @return MachinerySubCategory
      * @throws
      */
-    public function create(array $params): SubCategory
+    public function create(array $params): MachinerySubCategory
     {
         DB::beginTransaction();
 
@@ -85,29 +85,29 @@ class SubCategoryService
     }
 
     /**
-     * Updates sub category in the database
+     * Updates machinery sub category in the database
      *
      * @param array $params
-     * @param SubCategory $subCategory
-     * @return SubCategory
+     * @param MachinerySubCategory $subCategory
+     * @return MachinerySubCategory
      * @throws
      */
-    public function update(array $params, SubCategory $subCategory): SubCategory
+    public function update(array $params, MachinerySubCategory $subCategory): MachinerySubCategory
     {
         $subCategory->update($params);
         return $subCategory;
     }
 
     /**
-     * Deletes the sub category in the database
+     * Deletes the machinery sub category in the database
      *
-     * @param SubCategory $subCategory
+     * @param MachinerySubCategory $subCategory
      * @return bool
      * @throws
      */
-    public function delete(SubCategory $subCategory): bool
+    public function delete(MachinerySubCategory $subCategory): bool
     {
-        if (!($subCategory instanceof SubCategory)) {
+        if (!($subCategory instanceof MachinerySubCategory)) {
             throw new SubCategoryNotFoundException();
         }
         $subCategory->delete();

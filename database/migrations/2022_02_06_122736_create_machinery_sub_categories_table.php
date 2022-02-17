@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSubCategoryDescriptionsTable extends Migration
+class CreateMachinerySubCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,16 @@ class CreateSubCategoryDescriptionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('sub_category_descriptions', function (Blueprint $table) {
+        Schema::create('machinery_sub_categories', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('sub_category_id');
+            $table->unsignedBigInteger('machinery_id');
             $table->string('name');
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('sub_category_id')
+            $table->foreign('machinery_id')
                 ->references('id')
-                ->on('sub_categories')
+                ->on('machineries')
                 ->onDelete('cascade');
         });
     }
@@ -34,6 +34,6 @@ class CreateSubCategoryDescriptionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sub_category_descriptions');
+        Schema::dropIfExists('machinery_sub_categories');
     }
 }

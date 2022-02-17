@@ -4,20 +4,26 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SearchSubCategoryRequest extends FormRequest
+class SearchMachinerySubCategoryRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'keyword' => 'nullable',
-            'status' => ['nullable', 'in:' . implode(',', config('job.statuses'))],
-            'page' => ['nullable', 'numeric'],
-            'limit' => ['nullable', 'numeric'],
+
+            'page' => [
+                'nullable',
+                'numeric',
+            ],
+            'limit' => [
+                'nullable',
+                'numeric',
+            ],
         ];
     }
 

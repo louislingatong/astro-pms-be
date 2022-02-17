@@ -14,12 +14,13 @@ class RankResource extends JsonResource
      * @param Request $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         /** @var Rank $rank */
         $rank = $this->resource;
         return [
             'id' => $rank->getAttribute('id'),
+            'short_name' => $rank->getAttribute('short_name'),
             'name' => $rank->getAttribute('name'),
             'type' => new RankTypeResource($rank->type),
         ];
