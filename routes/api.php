@@ -27,9 +27,9 @@ Route::prefix('vessels')
 // register machineries routes
 Route::prefix('machineries')
     ->group(base_path('routes/api/machineries.php'));
-// register sub categories routes
-Route::prefix('sub-categories')
-    ->group(base_path('routes/api/sub-categories.php'));
+// register machinery sub categories routes
+Route::prefix('machinery-sub-categories')
+    ->group(base_path('routes/api/machinery-sub-categories.php'));
 // register intervals routes
 Route::prefix('intervals')
     ->group(base_path('routes/api/intervals.php'));

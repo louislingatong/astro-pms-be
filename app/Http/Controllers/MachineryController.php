@@ -12,8 +12,6 @@ use App\Models\Machinery;
 use App\Services\MachineryService;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Maatwebsite\Excel\Facades\Excel;
-use Maatwebsite\Excel\Validators\ValidationException;
 
 class MachineryController extends Controller
 {
