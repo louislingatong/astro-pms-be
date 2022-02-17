@@ -25,6 +25,7 @@ class RunningHourResource extends JsonResource
         return [
             'id' => $runningHour->getAttribute('id'),
             'running_hours' => $runningHour->getAttribute('running_hours'),
+            'updating_date' => Carbon::create($runningHour->getAttribute('updating_date'))->format('d-M-Y'),
             'created_at' => Carbon::create($runningHour->getAttribute('created_at'))->format('d-M-Y'),
             'creator' => $creator->getAttribute('full_name'),
         ];

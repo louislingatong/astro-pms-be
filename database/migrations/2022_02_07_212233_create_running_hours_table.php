@@ -16,7 +16,8 @@ class CreateRunningHoursTable extends Migration
         Schema::create('running_hours', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('vessel_machinery_id');
-            $table->string('running_hours');
+            $table->decimal('running_hours');
+            $table->timestamp('updating_date');
             $table->unsignedBigInteger('creator_id');
             $table->timestamps();
             $table->softDeletes();

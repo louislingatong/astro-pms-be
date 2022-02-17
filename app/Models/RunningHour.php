@@ -18,6 +18,7 @@ class RunningHour extends Model
     protected $fillable = [
         'vessel_machinery_id',
         'running_hours',
+        'updating_date',
         'creator_id'
     ];
 

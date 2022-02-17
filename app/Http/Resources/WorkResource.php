@@ -24,6 +24,7 @@ class WorkResource extends JsonResource
         $creator = $work->creator;
         return [
             'id' => $work->getAttribute('id'),
+            'last_done' => Carbon::create($work->getAttribute('last_done'))->format('d-M-Y'),
             'instructions' => $work->getAttribute('instructions'),
             'remarks' => $work->getAttribute('remarks'),
             'created_at' => Carbon::create($work->getAttribute('created_at'))->format('d-M-Y'),

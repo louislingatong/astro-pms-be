@@ -42,6 +42,7 @@ class WorkController extends Controller
 
         try {
             $conditions = [
+                'vessel_id' => $request->getVesselId(),
                 'keyword' => $request->getKeyword(),
                 'status' => $request->getStatus(),
                 'page' => $request->getPage(),

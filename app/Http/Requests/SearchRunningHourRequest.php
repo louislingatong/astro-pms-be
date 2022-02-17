@@ -14,6 +14,10 @@ class SearchRunningHourRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'vessel_id' => [
+                'required',
+                'exists:vessels,id',
+            ],
             'keyword' => 'nullable',
             'page' => [
                 'nullable',
@@ -24,6 +28,11 @@ class SearchRunningHourRequest extends FormRequest
                 'numeric',
             ],
         ];
+    }
+
+    public function getVesselId()
+    {
+        return $this->input('vessel_id', null);
     }
 
     public function getKeyword()

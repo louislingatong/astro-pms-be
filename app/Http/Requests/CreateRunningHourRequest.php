@@ -22,6 +22,11 @@ class CreateRunningHourRequest extends FormRequest
                 'required',
                 'numeric',
             ],
+            'updating_date' => [
+                'required',
+                'date',
+                'date_format:d-M-Y',
+            ],
         ];
     }
 
@@ -33,5 +38,10 @@ class CreateRunningHourRequest extends FormRequest
     public function getRunningHours()
     {
         return $this->input('running_hours', null);
+    }
+
+    public function getUpdatingDate()
+    {
+        return $this->input('updating_date', null);
     }
 }

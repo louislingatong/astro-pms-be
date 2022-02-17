@@ -42,6 +42,7 @@ class RunningHourController extends Controller
 
         try {
             $conditions = [
+                'vessel_id' => $request->getVesselId(),
                 'keyword' => $request->getKeyword(),
                 'page' => $request->getPage(),
                 'limit' => $request->getLimit(),
@@ -75,6 +76,7 @@ class RunningHourController extends Controller
             $formData = [
                 'vessel_machinery_id' => $request->getVesselMachineryId(),
                 'running_hours' => $request->getRunningHours(),
+                'updating_date' => $request->getUpdatingDate(),
                 'creator_id' => $creator->getAttribute('id'),
             ];
             $runningHour = $this->runningHourService->create($formData);

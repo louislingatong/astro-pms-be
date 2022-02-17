@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\DB;
 
 class WorkService
 {
-    /** @var VesselMachinerySubCategory $vesselSubCategory */
-    protected $vesselSubCategory;
+    /** @var VesselMachinerySubCategory $vesselMachinerySubCategory */
+    protected $vesselMachinerySubCategory;
 
     /** @var Work $work */
     protected $work;
@@ -23,17 +23,17 @@ class WorkService
     /**
      * WorkService constructor.
      *
-     * @param VesselMachinerySubCategory $vesselSubCategory
+     * @param VesselMachinerySubCategory $vesselMachinerySubCategory
      * @param Work $work
      * @param VesselMachinerySubCategoryService $vesselMachinerySubCategoryService
      */
     public function __construct(
-        VesselMachinerySubCategory $vesselSubCategory,
+        VesselMachinerySubCategory $vesselMachinerySubCategory,
         Work $work,
         VesselMachinerySubCategoryService $vesselMachinerySubCategoryService
     )
     {
-        $this->vesselSubCategory = $vesselSubCategory;
+        $this->vesselMachinerySubCategory = $vesselMachinerySubCategory;
         $this->work = $work;
         $this->vesselMachinerySubCategoryService = $vesselMachinerySubCategoryService;
     }
@@ -60,7 +60,9 @@ class WorkService
 
         $skip = ($page > 1) ? ($page * $limit - $limit) : 0;
 
-        $query = $this->vesselSubCategory;
+        $query = $this->vesselMachinerySubCategory->whereHas('vesselMachinery', function ($q) use ($conditions) {
+            $q->where('vessel_id', '=', $conditions['vessel_id']);
+        });
 
         if ($conditions['keyword']) {
             $query = $query->search($conditions['keyword']);

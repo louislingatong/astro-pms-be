@@ -138,6 +138,7 @@ class VesselMachinerySubCategoryService
             }
 
             $vesselMachinerySubCategory->update($params);
+
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
@@ -177,8 +178,8 @@ class VesselMachinerySubCategoryService
         /** @var IntervalUnit $intervalUnit */
         $intervalUnit = $interval->unit;
         switch ($intervalUnit->getAttribute('name')) {
-            case config('interval.units.daily'):
-                $dueDate->addDay();
+            case config('interval.units.days'):
+                $dueDate->addDays($interval->getAttribute('value'));
                 break;
             case config('interval.units.hours'):
                 $dueDate->addHours($interval->getAttribute('value'));

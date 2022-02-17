@@ -14,10 +14,14 @@ class SearchWorkRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'vessel_id' => [
+                'required',
+                'exists:vessels,id',
+            ],
             'keyword' => 'nullable',
             'status' => [
                 'nullable',
-                'in:' . implode(',', config('job.statuses')),
+                'in:' . implode(',', config('work.statuses')),
             ],
             'page' => [
                 'nullable',
@@ -28,6 +32,11 @@ class SearchWorkRequest extends FormRequest
                 'numeric',
             ],
         ];
+    }
+
+    public function getVesselId()
+    {
+        return $this->input('vessel_id', null);
     }
 
     public function getKeyword()

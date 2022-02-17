@@ -2,7 +2,7 @@
 
 return [
     'units' => [
-        'daily' => 'Daily',
+        'days' => 'Days',
         'hours' => 'Hour/s',
         'weeks' => 'Week/s',
         'months' => 'Month/s',
