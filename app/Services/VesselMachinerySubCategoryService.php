@@ -6,7 +6,7 @@ use App\Exceptions\VesselMachinerySubCategoryNotFoundException;
 use App\Http\Resources\VesselMachinerySubCategoryResource;
 use App\Models\Interval;
 use App\Models\IntervalUnit;
-use App\Models\MachinerySubCategoryDescription;
+use App\Models\MachinerySubCategory;
 use App\Models\VesselMachinery;
 use App\Models\VesselMachinerySubCategory;
 use Carbon\Carbon;
@@ -18,22 +18,16 @@ class VesselMachinerySubCategoryService
     /** @var VesselMachinerySubCategory $vesselMachinerySubCategory */
     protected $vesselMachinerySubCategory;
 
-    /** @var MachinerySubCategoryDescription $description */
-    protected $description;
-
     /**
      * VesselMachinerySubCategoryService constructor.
      *
      * @param VesselMachinerySubCategory $vesselMachinerySubCategory
-     * @param MachinerySubCategoryDescription $description
      */
     public function __construct(
         VesselMachinerySubCategory $vesselMachinerySubCategory,
-        MachinerySubCategoryDescription $description
     )
     {
         $this->vesselMachinerySubCategory = $vesselMachinerySubCategory;
-        $this->description = $description;
     }
 
     /**
@@ -87,15 +81,24 @@ class VesselMachinerySubCategoryService
         try {
             /** @var VesselMachinery $vesselMachinery */
             $vesselMachinery = VesselMachinery::find($params['vessel_machinery_id']);
-            $interval = Interval::find($params['interval_id']);
+
+            /** @var Interval $interval */
+            $interval = Interval::whereName($params['interval'])->first();
+
             $params['due_date'] = $this->getDueDate($vesselMachinery->getAttribute('installed_date'), $interval);
 
+            /** @var MachinerySubCategory $machinerySubCategory */
+            $machinerySubCategory = MachinerySubCategory::find($params['machinery_sub_category_id']);
             if ($params['description']) {
-                $this->description = $this->description->firstOrCreate(['name' => $params['description']]);
+                $description = $machinerySubCategory
+                    ->descriptions()
+                    ->firstOrCreate([
+                        'name' => $params['description'],
+                    ]);
             }
 
-            if ($this->description->getAttribute('id')) {
-                $params['machinery_sub_category_description_id'] = $this->description->getAttribute('id');
+            if (isset($description) && $description->getAttribute('id')) {
+                $params['machinery_sub_category_description_id'] = $description->getAttribute('id');
             }
 
             /** @var VesselMachinerySubCategory $vesselSubCategory */
@@ -126,15 +129,24 @@ class VesselMachinerySubCategoryService
         try {
             /** @var VesselMachinery $vesselMachinery */
             $vesselMachinery = VesselMachinery::find($params['vessel_machinery_id']);
-            $interval = Interval::find($params['interval_id']);
+
+            /** @var Interval $interval */
+            $interval = Interval::whereName($params['interval'])->first();
+
             $params['due_date'] = $this->getDueDate($vesselMachinery->getAttribute('installed_date'), $interval);
 
+            /** @var MachinerySubCategory $machinerySubCategory */
+            $machinerySubCategory = MachinerySubCategory::find($params['machinery_sub_category_id']);
             if ($params['description']) {
-                $this->description = $this->description->firstOrCreate(['name' => $params['description']]);
+                $description = $machinerySubCategory
+                    ->descriptions()
+                    ->firstOrCreate([
+                        'name' => $params['description'],
+                    ]);
             }
 
-            if ($this->description->getAttribute('id')) {
-                $params['machinery_sub_category_description_id'] = $this->description->getAttribute('id');
+            if (isset($description) && $description->getAttribute('id')) {
+                $params['machinery_sub_category_description_id'] = $description->getAttribute('id');
             }
 
             $vesselMachinerySubCategory->update($params);

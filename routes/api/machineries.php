@@ -8,5 +8,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('{machinery}', 'MachineryController@read');
     Route::put('{machinery}', 'MachineryController@update');
     Route::delete('{machinery}', 'MachineryController@delete');
+
     Route::post('/import', 'MachineryController@import');
+    Route::put('{machinery}/add-sub-category', 'MachineryController@addSubCategory');
 });

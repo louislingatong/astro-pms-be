@@ -16,18 +16,18 @@ use Illuminate\Http\JsonResponse;
 class MachinerySubCategoryController extends Controller
 {
     /** @var MachinerySubCategoryService */
-    protected $subCategoryService;
+    protected $machinerySubCategoryService;
 
     /**
      * MachinerySubCategoryController constructor
      *
-     * @param MachinerySubCategoryService $subCategoryService
+     * @param MachinerySubCategoryService $machinerySubCategoryService
      */
-    public function __construct(MachinerySubCategoryService $subCategoryService)
+    public function __construct(MachinerySubCategoryService $machinerySubCategoryService)
     {
         parent::__construct();
 
-        $this->subCategoryService = $subCategoryService;
+        $this->machinerySubCategoryService = $machinerySubCategoryService;
 
         // enable api middleware
         $this->middleware(['auth:api']);
@@ -49,7 +49,7 @@ class MachinerySubCategoryController extends Controller
                 'page' => $request->getPage(),
                 'limit' => $request->getLimit(),
             ];
-            $results = $this->subCategoryService->search($conditions);
+            $results = $this->machinerySubCategoryService->search($conditions);
             $this->response = array_merge($results, $this->response);
         } catch (Exception $e) {
             $this->response = [
@@ -76,7 +76,7 @@ class MachinerySubCategoryController extends Controller
                 'machinery_id' => $request->getMachineryId(),
                 'name' => $request->getName(),
             ];
-            $subCategory = $this->subCategoryService->create($formData);
+            $subCategory = $this->machinerySubCategoryService->create($formData);
             $this->response['data'] = new MachinerySubCategoryResource($subCategory);
         } catch (Exception $e) {
             $this->response = [
@@ -127,7 +127,7 @@ class MachinerySubCategoryController extends Controller
                 'machinery_id' => $request->getMachineryId(),
                 'name' => $request->getName(),
             ];
-            $subCategory = $this->subCategoryService->update($formData, $subCategory);
+            $subCategory = $this->machinerySubCategoryService->update($formData, $subCategory);
             $this->response['data'] = new MachinerySubCategoryResource($subCategory);
         } catch (Exception $e) {
             $this->response = [
@@ -148,7 +148,7 @@ class MachinerySubCategoryController extends Controller
     public function delete(MachinerySubCategory $subCategory): JsonResponse
     {
         try {
-            $this->response['deleted'] = $this->subCategoryService->delete($subCategory);
+            $this->response['deleted'] = $this->machinerySubCategoryService->delete($subCategory);
         } catch (Exception $e) {
             $this->response = [
                 'error' => $e->getMessage(),

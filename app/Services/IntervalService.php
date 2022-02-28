@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exceptions\IntervalNotFoundException;
 use App\Http\Resources\IntervalResource;
 use App\Models\Interval;
+use App\Models\IntervalUnit;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -73,7 +74,13 @@ class IntervalService
         DB::beginTransaction();
 
         try {
-            $vessel = $this->interval->create($params);
+            /** @var IntervalUnit $intervalUnit */
+            $intervalUnit = IntervalUnit::whereName($params['interval_unit'])->first();
+            $interval = $this->interval->create([
+                'interval_unit_id' => $intervalUnit->getAttribute('id'),
+                'value' => $params['value'],
+                'name' => $params['value'] . ' ' . $intervalUnit->getAttribute('name'),
+            ]);
 
             DB::commit();
         } catch (Exception $e) {
@@ -82,7 +89,7 @@ class IntervalService
             throw $e;
         }
 
-        return $vessel;
+        return $interval;
     }
 
     /**
@@ -95,7 +102,13 @@ class IntervalService
      */
     public function update(array $params, Interval $interval): Interval
     {
-        $interval->update($params);
+        /** @var IntervalUnit $intervalUnit */
+        $intervalUnit = IntervalUnit::whereName($params['interval_unit'])->first();
+        $interval->update([
+            'value' => $params['value'],
+            'interval_unit_id' => $intervalUnit->getAttribute('id'),
+            'name' => $params['value'] . ' ' . $intervalUnit->getAttribute('name'),
+        ]);
         return $interval;
     }
 

@@ -16,9 +16,9 @@ class UpdateVesselMachinerySubCategoryRequest extends FormRequest
         return [
             'code' => 'required',
             'description' => 'nullable',
-            'interval_id' => [
+            'interval' => [
                 'required',
-                'exists:intervals,id',
+                'exists:intervals,name',
             ],
             'vessel_machinery_id' => [
                 'required',
@@ -41,9 +41,9 @@ class UpdateVesselMachinerySubCategoryRequest extends FormRequest
         return $this->input('description', null);
     }
 
-    public function getIntervalId()
+    public function getInterval()
     {
-        return $this->input('interval_id', null);
+        return $this->input('interval', null);
     }
 
     public function getVesselMachineryId()

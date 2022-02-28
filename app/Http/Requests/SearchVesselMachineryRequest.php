@@ -14,6 +14,14 @@ class SearchVesselMachineryRequest extends FormRequest
     public function rules()
     {
         return [
+            'vessel' => [
+                'required',
+                'exists:vessels,name',
+            ],
+            'department' => [
+                'nullable',
+                'exists:vessel_departments,name',
+            ],
             'keyword' => 'nullable',
             'page' => [
                 'nullable',
@@ -24,6 +32,16 @@ class SearchVesselMachineryRequest extends FormRequest
                 'numeric',
             ],
         ];
+    }
+
+    public function getVessel()
+    {
+        return $this->input('vessel', null);
+    }
+
+    public function getDepartment()
+    {
+        return $this->input('department', '');
     }
 
     public function getKeyword()

@@ -21,6 +21,7 @@ class IntervalResource extends JsonResource
         return [
             'id' => $interval->getAttribute('id'),
             'value' => $interval->getAttribute('value'),
+            'name' => $interval->getAttribute('name'),
             'unit' => new IntervalUnitResource($interval->unit),
         ];
     }

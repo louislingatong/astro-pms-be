@@ -7,6 +7,8 @@ use App\Http\Resources\MachineryResource;
 use App\Models\Machinery;
 use App\Models\MachineryMaker;
 use App\Models\MachineryModel;
+use App\Models\MachinerySubCategory;
+use App\Models\VesselDepartment;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -63,6 +65,12 @@ class MachineryService
 
         $query = $this->machinery;
 
+        if ($conditions['department']) {
+            $query = $query->whereHas('department', function ($q) use ($conditions) {
+                $q->where('name', '=', $conditions['department']);
+            });
+        }
+
         if ($conditions['keyword']) {
             $query = $query->search($conditions['keyword']);
         }
@@ -96,7 +104,15 @@ class MachineryService
                 $machineryMaker = $this->findOrCreateMakerByName($params['maker']);
                 $params['machinery_maker_id'] = $machineryMaker->getAttribute('id');
             }
-            $machinery = $this->machinery->create($params);
+            /** @var VesselDepartment $department */
+            $department = VesselDepartment::whereName($params['vessel_department'])->first();
+            $machinery = $this->machinery->create([
+                'vessel_department_id' => $department->getAttribute('id'),
+                'code_name' => $params['code_name'],
+                'name' => $params['name'],
+                'model' => $params['model'],
+                'maker' => $params['maker'],
+            ]);
 
             DB::commit();
         } catch (Exception $e) {
@@ -129,7 +145,15 @@ class MachineryService
                 $machineryMaker = $this->findOrCreateMakerByName($params['model']);
                 $params['machinery_maker_id'] = $machineryMaker->getAttribute('id');
             }
-            $machinery->update($params);
+            /** @var VesselDepartment $department */
+            $department = VesselDepartment::whereName($params['vessel_department'])->first();
+            $machinery->update([
+                'vessel_department_id' => $department->getAttribute('id'),
+                'code_name' => $params['code_name'],
+                'name' => $params['name'],
+                'model' => $params['model'],
+                'maker' => $params['maker'],
+            ]);
 
             DB::commit();
         } catch (Exception $e) {
@@ -155,6 +179,20 @@ class MachineryService
         }
         $machinery->delete();
         return true;
+    }
+
+    /**
+     * Add new sub category
+     *
+     * @param array $params
+     * @param Machinery $machinery
+     * @return Machinery
+     * @throws
+     */
+    public function addSubCategory(array $params, Machinery $machinery): Machinery
+    {
+        $machinery->subCategories()->save(new MachinerySubCategory($params));
+        return $machinery;
     }
 
     /**

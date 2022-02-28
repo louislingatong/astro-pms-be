@@ -14,9 +14,9 @@ class CreateMachineryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'department_id' => [
+            'department' => [
                 'required',
-                'exists:vessel_departments,id',
+                'exists:vessel_departments,name',
             ],
             'code_name' => 'required',
             'name' => 'required',
@@ -25,9 +25,9 @@ class CreateMachineryRequest extends FormRequest
         ];
     }
 
-    public function getDepartmentId()
+    public function getDepartment()
     {
-        return $this->input('department_id', null);
+        return $this->input('department', null);
     }
 
     public function getCodeName()

@@ -17,6 +17,7 @@ class CreateIntervalsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('interval_unit_id');
             $table->bigInteger('value');
+            $table->string('name');
             $table->timestamps();
             $table->softDeletes();
 

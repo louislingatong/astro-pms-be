@@ -45,3 +45,26 @@ Route::prefix('running-hours')
 // register works routes
 Route::prefix('works')
     ->group(base_path('routes/api/works.php'));
+
+
+// register vessel owners routes
+Route::prefix('vessel-owners')
+    ->group(base_path('routes/api/vessel-owners.php'));
+// register vessel departments routes
+Route::prefix('vessel-departments')
+    ->group(base_path('routes/api/vessel-departments.php'));
+// register machinery models routes
+Route::prefix('machinery-models')
+    ->group(base_path('routes/api/machinery-models.php'));
+// register machinery makers routes
+Route::prefix('machinery-makers')
+    ->group(base_path('routes/api/machinery-makers.php'));
+// register machinery sub category descriptions routes
+Route::prefix('machinery-sub-category-descriptions')
+    ->group(base_path('routes/api/machinery-sub-category-descriptions.php'));
+// register interval units routes
+Route::prefix('interval-units')
+    ->group(base_path('routes/api/interval-units.php'));
+// register ranks routes
+Route::prefix('ranks')
+    ->group(base_path('routes/api/ranks.php'));

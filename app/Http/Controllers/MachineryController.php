@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddSubCategoryRequest;
 use App\Http\Requests\CreateMachineryRequest;
 use App\Http\Requests\ImportRequest;
 use App\Http\Requests\SearchMachineryRequest;
@@ -45,6 +46,7 @@ class MachineryController extends Controller
 
         try {
             $conditions = [
+                'department' => $request->getDepartment(),
                 'keyword' => $request->getKeyword(),
                 'page' => $request->getPage(),
                 'limit' => $request->getLimit(),
@@ -73,7 +75,7 @@ class MachineryController extends Controller
 
         try {
             $formData = [
-                'vessel_department_id' => $request->getDepartmentId(),
+                'vessel_department' => $request->getDepartment(),
                 'code_name' => $request->getCodeName(),
                 'name' => $request->getName(),
                 'model' => $request->getModel(),
@@ -124,7 +126,7 @@ class MachineryController extends Controller
 
         try {
             $formData = [
-                'vessel_department_id' => $request->getDepartmentId(),
+                'vessel_department' => $request->getDepartment(),
                 'code_name' => $request->getCodeName(),
                 'name' => $request->getName(),
                 'model' => $request->getModel(),
@@ -184,6 +186,31 @@ class MachineryController extends Controller
         if ($import->errors()->isNotEmpty()) {
             $this->response = [
                 'error' => $import->errors(),
+                'code' => 500,
+            ];
+        }
+
+        return response()->json($this->response, $this->response['code']);
+    }
+
+    /**
+     * @param AddSubCategoryRequest $request
+     * @param Machinery $machinery
+     * @return JsonResponse
+     */
+    public function addSubCategory(AddSubCategoryRequest $request, Machinery $machinery): JsonResponse
+    {
+        $request->validated();
+
+        try {
+            $formData = [
+                'name' => $request->getName(),
+            ];
+            $machinery = $this->machineryService->addSubCategory($formData, $machinery);
+            $this->response['data'] = new MachineryResource($machinery);
+        } catch (Exception $e) {
+            $this->response = [
+                'error' => $e->getMessage(),
                 'code' => 500,
             ];
         }

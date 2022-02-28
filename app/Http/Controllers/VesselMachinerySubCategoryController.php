@@ -73,7 +73,7 @@ class VesselMachinerySubCategoryController extends Controller
         try {
             $formData = [
                 'code' => $request->getCode(),
-                'interval_id' => $request->getIntervalId(),
+                'interval' => $request->getInterval(),
                 'vessel_machinery_id' => $request->getVesselMachineryId(),
                 'machinery_sub_category_id' => $request->getMachinerySubCategoryId(),
                 'description' => $request->getDescription(),
@@ -127,7 +127,7 @@ class VesselMachinerySubCategoryController extends Controller
         try {
             $formData = [
                 'code' => $request->getCode(),
-                'interval_id' => $request->getIntervalId(),
+                'interval' => $request->getInterval(),
                 'vessel_machinery_id' => $request->getVesselMachineryId(),
                 'machinery_sub_category_id' => $request->getMachinerySubCategoryId(),
                 'description' => $request->getDescription(),

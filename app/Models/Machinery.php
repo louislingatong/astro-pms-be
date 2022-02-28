@@ -75,15 +75,6 @@ class Machinery extends Model
     public function scopeSearch(Builder $query, string $keyword): Builder
     {
         return $query->where('code_name', 'LIKE', "%$keyword%")
-            ->orWhere('name', 'LIKE', "%$keyword%")
-            ->orWhereHas('department', function ($q) use ($keyword) {
-                $q->where('name', 'LIKE', "%$keyword%");
-            })
-            ->orWhereHas('model', function ($q) use ($keyword) {
-                $q->where('name', 'LIKE', "%$keyword%");
-            })
-            ->orWhereHas('maker', function ($q) use ($keyword) {
-                $q->where('name', 'LIKE', "%$keyword%");
-            });
+            ->orWhere('name', 'LIKE', "%$keyword%");
     }
 }

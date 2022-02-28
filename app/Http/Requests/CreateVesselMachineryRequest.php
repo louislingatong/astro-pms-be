@@ -14,43 +14,43 @@ class CreateVesselMachineryRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'vessel' => [
+                'required',
+                'exists:vessels,name',
+            ],
+            'machinery' => [
+                'required',
+                'exists:machineries,name',
+            ],
+            'incharge_rank' => [
+                'required',
+                'exists:ranks,name',
+            ],
             'installed_date' => [
                 'required',
                 'date',
                 'date_format:d-M-Y',
             ],
-            'vessel_id' => [
-                'required',
-                'exists:vessels,id',
-            ],
-            'machinery_id' => [
-                'required',
-                'exists:machineries,id',
-            ],
-            'incharge_rank_id' => [
-                'required',
-                'exists:ranks,id',
-            ],
         ];
+    }
+
+    public function getVessel()
+    {
+        return $this->input('vessel', null);
+    }
+
+    public function getMachinery()
+    {
+        return $this->input('machinery', null);
+    }
+
+    public function getInchargeRank()
+    {
+        return $this->input('incharge_rank', null);
     }
 
     public function getInstalledDate()
     {
         return $this->input('installed_date', null);
-    }
-
-    public function getVesselId()
-    {
-        return $this->input('vessel_id', null);
-    }
-
-    public function getMachineryId()
-    {
-        return $this->input('machinery_id', null);
-    }
-
-    public function getInchargeRankId()
-    {
-        return $this->input('incharge_rank_id', null);
     }
 }

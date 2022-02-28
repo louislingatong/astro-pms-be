@@ -18,7 +18,8 @@ class Interval extends Model
      */
     protected $fillable = [
         'interval_unit_id',
-        'value'
+        'value',
+        'name',
     ];
 
     /**
@@ -41,6 +42,7 @@ class Interval extends Model
     public function scopeSearch(Builder $query, string $keyword): Builder
     {
         return $query->where('value', 'LIKE', "%$keyword%")
+            ->orWhere('name', 'LIKE', "%$keyword%")
             ->orWhereHas('unit', function ($q) use ($keyword) {
                 $q->where('name', 'LIKE', "%$keyword%");
             });

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateVesselMachineryRequest;
+use App\Http\Requests\EditVesselMachinerySubCategoryRequest;
 use App\Http\Requests\SearchVesselMachineryRequest;
 use App\Http\Requests\UpdateVesselMachineryRequest;
 use App\Http\Resources\VesselMachineryResource;
@@ -44,6 +45,8 @@ class VesselMachineryController extends Controller
 
         try {
             $conditions = [
+                'vessel' => $request->getVessel(),
+                'department' => $request->getDepartment(),
                 'keyword' => $request->getKeyword(),
                 'page' => $request->getPage(),
                 'limit' => $request->getLimit(),
@@ -72,10 +75,10 @@ class VesselMachineryController extends Controller
 
         try {
             $formData = [
+                'vessel' => $request->getVessel(),
+                'machinery' => $request->getMachinery(),
+                'incharge_rank' => $request->getInchargeRank(),
                 'installed_date' => Carbon::create($request->getInstalledDate()),
-                'vessel_id' => $request->getVesselId(),
-                'machinery_id' => $request->getMachineryId(),
-                'incharge_rank_id' => $request->getInchargeRankId(),
             ];
             $vesselMachinery = $this->vesselMachineryService->create($formData);
             $this->response['data'] = new VesselMachineryResource($vesselMachinery);
@@ -122,10 +125,10 @@ class VesselMachineryController extends Controller
 
         try {
             $formData = [
+                'vessel' => $request->getVessel(),
+                'machinery' => $request->getMachinery(),
+                'incharge_rank' => $request->getInchargeRank(),
                 'installed_date' => Carbon::create($request->getInstalledDate()),
-                'vessel_id' => $request->getVesselId(),
-                'machinery_id' => $request->getMachineryId(),
-                'incharge_rank_id' => $request->getInchargeRankId(),
             ];
             $vesselMachinery = $this->vesselMachineryService->update($formData, $vesselMachinery);
             $this->response['data'] = new VesselMachineryResource($vesselMachinery);
@@ -149,6 +152,34 @@ class VesselMachineryController extends Controller
     {
         try {
             $this->response['deleted'] = $this->vesselMachineryService->delete($vesselMachinery);
+        } catch (Exception $e) {
+            $this->response = [
+                'error' => $e->getMessage(),
+                'code' => 500,
+            ];
+        }
+
+        return response()->json($this->response, $this->response['code']);
+    }
+
+    /**
+     * @param EditVesselMachinerySubCategoryRequest $request
+     * @param VesselMachinery $vesselMachinery
+     * @return JsonResponse
+     */
+    public function editMachinerySubCategories(
+        EditVesselMachinerySubCategoryRequest $request,
+        VesselMachinery $vesselMachinery
+    ): JsonResponse
+    {
+        $request->validated();
+
+        try {
+            $formData = [
+                'vessel_machinery_sub_categories' => $request->getVesselMachinerySubCategories(),
+            ];
+            $vesselMachinery = $this->vesselMachineryService->editMachinerySubCategories($formData, $vesselMachinery);
+            $this->response['data'] = new VesselMachineryResource($vesselMachinery);
         } catch (Exception $e) {
             $this->response = [
                 'error' => $e->getMessage(),

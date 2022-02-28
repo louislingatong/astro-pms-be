@@ -4,7 +4,15 @@ namespace App\Services;
 
 use App\Exceptions\VesselMachineryNotFoundException;
 use App\Http\Resources\VesselMachineryResource;
+use App\Models\Interval;
+use App\Models\IntervalUnit;
+use App\Models\Machinery;
+use App\Models\MachinerySubCategory;
+use App\Models\Rank;
+use App\Models\Vessel;
 use App\Models\VesselMachinery;
+use App\Models\VesselMachinerySubCategory;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -45,7 +53,17 @@ class VesselMachineryService
 
         $skip = ($page > 1) ? ($page * $limit - $limit) : 0;
 
-        $query = $this->vesselMachinery;
+        $query = $this->vesselMachinery->whereHas('vessel', function ($q) use ($conditions) {
+            $q->where('name', '=', $conditions['vessel']);
+        });
+
+        if ($conditions['department']) {
+            $query = $query->whereHas('machinery', function ($q) use ($conditions) {
+                $q->whereHas('department', function ($q) use ($conditions) {
+                    $q->where('name', '=', $conditions['department']);
+                });
+            });
+        }
 
         if ($conditions['keyword']) {
             $query = $query->search($conditions['keyword']);
@@ -72,7 +90,18 @@ class VesselMachineryService
         DB::beginTransaction();
 
         try {
-            $vessel = $this->vesselMachinery->create($params);
+            /** @var Vessel $vessel */
+            $vessel = Vessel::whereName($params['vessel'])->first();
+            /** @var Machinery $machinery */
+            $machinery = Machinery::whereName($params['machinery'])->first();
+            /** @var Rank $inchargeRank */
+            $inchargeRank = Rank::whereName($params['incharge_rank'])->first();
+            $vesselMachinery = $this->vesselMachinery->create([
+                'vessel_id' => $vessel->getAttribute('id'),
+                'machinery_id' => $machinery->getAttribute('id'),
+                'incharge_rank_id' => $inchargeRank->getAttribute('id'),
+                'installed_date' => $params['installed_date'],
+            ]);
 
             DB::commit();
         } catch (Exception $e) {
@@ -81,7 +110,7 @@ class VesselMachineryService
             throw $e;
         }
 
-        return $vessel;
+        return $vesselMachinery;
     }
 
     /**
@@ -94,7 +123,18 @@ class VesselMachineryService
      */
     public function update(array $params, VesselMachinery $vesselMachinery): VesselMachinery
     {
-        $vesselMachinery->update($params);
+        /** @var Vessel $vessel */
+        $vessel = Vessel::whereName($params['vessel'])->first();
+        /** @var Machinery $machinery */
+        $machinery = Machinery::whereName($params['machinery'])->first();
+        /** @var Rank $inchargeRank */
+        $inchargeRank = Rank::whereName($params['incharge_rank'])->first();
+        $vesselMachinery->update([
+            'vessel_id' => $vessel->getAttribute('id'),
+            'machinery_id' => $machinery->getAttribute('id'),
+            'incharge_rank_id' => $inchargeRank->getAttribute('id'),
+            'installed_date' => $params['installed_date'],
+        ]);
         return $vesselMachinery;
     }
 
@@ -112,5 +152,110 @@ class VesselMachineryService
         }
         $vesselMachinery->delete();
         return true;
+    }
+
+    /**
+     * Edit vessel machinery sub categories
+     *
+     * @param array $params
+     * @param VesselMachinery $vesselMachinery
+     * @return VesselMachinery
+     * @throws
+     */
+    public function editMachinerySubCategories(array $params, VesselMachinery $vesselMachinery): VesselMachinery
+    {
+        DB::beginTransaction();
+
+        try {
+            $newVesselMachinerySubCategories = [];
+            foreach ($params['vessel_machinery_sub_categories'] as $subCategory) {
+                /** @var Interval $interval */
+                $interval = Interval::whereName($subCategory['interval'])->first();
+
+                $dueDate = $this->getDueDate($vesselMachinery->getAttribute('installed_date'), $interval);
+
+                /** @var MachinerySubCategory $machinerySubCategory */
+                $machinerySubCategory = MachinerySubCategory::find($subCategory['machinery_sub_category_id']);
+                if ($subCategory['description']) {
+                    $description = $machinerySubCategory
+                        ->descriptions()
+                        ->firstOrCreate([
+                            'name' => $subCategory['description'],
+                        ]);
+                }
+
+                /** @var VesselMachinerySubCategory $vesselMachinerySubCategory */
+                $vesselMachinerySubCategory = $vesselMachinery->subCategories()
+                    ->whereHas('subCategory', function ($q) use ($machinerySubCategory) {
+                        $q->whereId($machinerySubCategory->getAttribute('id'));
+                    })
+                    ->first();
+
+                if ($vesselMachinerySubCategory instanceof VesselMachinerySubCategory) {
+                    $vesselMachinerySubCategory->update([
+                        'code' => $subCategory['code'],
+                        'interval_id' => $interval->getAttribute('id'),
+                        'machinery_sub_category_description_id' => isset($description)
+                            ? $description->getAttribute('id')
+                            : null,
+                    ]);
+                } else {
+                    $newVesselMachinerySubCategories[] = new VesselMachinerySubCategory([
+                        'code' => $subCategory['code'],
+                        'due_date' => $dueDate,
+                        'interval_id' => $interval->getAttribute('id'),
+                        'machinery_sub_category_id' => $machinerySubCategory->getAttribute('id'),
+                        'machinery_sub_category_description_id' => isset($description)
+                            ? $description->getAttribute('id')
+                            : null,
+                    ]);
+                }
+            }
+
+            if (!empty($newVesselMachinerySubCategories)) {
+                $vesselMachinery->subCategories()->saveMany($newVesselMachinerySubCategories);
+            }
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+
+            throw $e;
+        }
+
+        return $vesselMachinery;
+    }
+
+    /**
+     * Get the job due date
+     *
+     * @param string $date
+     * @param Interval $interval
+     * @return Carbon
+     */
+    public function getDueDate(string $date, Interval $interval): Carbon
+    {
+        $dueDate = Carbon::create($date);
+
+        /** @var IntervalUnit $intervalUnit */
+        $intervalUnit = $interval->unit;
+        switch ($intervalUnit->getAttribute('name')) {
+            case config('interval.units.days'):
+                $dueDate->addDays($interval->getAttribute('value'));
+                break;
+            case config('interval.units.hours'):
+                $dueDate->addHours($interval->getAttribute('value'));
+                break;
+            case config('interval.units.weeks'):
+                $dueDate->addWeeks($interval->getAttribute('value'));
+                break;
+            case config('interval.units.months'):
+                $dueDate->addMonths($interval->getAttribute('value'));
+                break;
+            case config('interval.units.years'):
+                $dueDate->addYears($interval->getAttribute('value'));
+                break;
+        }
+        return $dueDate;
     }
 }
