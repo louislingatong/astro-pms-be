@@ -15,6 +15,7 @@ use App\Models\VesselMachinerySubCategory;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class VesselMachineryService
 {
@@ -58,10 +59,8 @@ class VesselMachineryService
         });
 
         if ($conditions['department']) {
-            $query = $query->whereHas('machinery', function ($q) use ($conditions) {
-                $q->whereHas('department', function ($q) use ($conditions) {
-                    $q->where('name', '=', $conditions['department']);
-                });
+            $query = $query->whereHas('machinery.department', function ($q) use ($conditions) {
+                $q->where('name', '=', $conditions['department']);
             });
         }
 
@@ -194,6 +193,7 @@ class VesselMachineryService
                 if ($vesselMachinerySubCategory instanceof VesselMachinerySubCategory) {
                     $vesselMachinerySubCategory->update([
                         'code' => $subCategory['code'],
+                        'due_date' => $dueDate,
                         'interval_id' => $interval->getAttribute('id'),
                         'machinery_sub_category_description_id' => isset($description)
                             ? $description->getAttribute('id')
@@ -236,7 +236,6 @@ class VesselMachineryService
     public function getDueDate(string $date, Interval $interval): Carbon
     {
         $dueDate = Carbon::create($date);
-
         /** @var IntervalUnit $intervalUnit */
         $intervalUnit = $interval->unit;
         switch ($intervalUnit->getAttribute('name')) {

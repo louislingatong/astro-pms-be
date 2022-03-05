@@ -14,9 +14,13 @@ class SearchRunningHourRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'vessel_id' => [
+            'vessel' => [
                 'required',
-                'exists:vessels,id',
+                'exists:vessels,name',
+            ],
+            'department' => [
+                'nullable',
+                'exists:vessel_departments,name',
             ],
             'keyword' => 'nullable',
             'page' => [
@@ -30,9 +34,14 @@ class SearchRunningHourRequest extends FormRequest
         ];
     }
 
-    public function getVesselId()
+    public function getVessel()
     {
-        return $this->input('vessel_id', null);
+        return $this->input('vessel', null);
+    }
+
+    public function getDepartment()
+    {
+        return $this->input('department', '');
     }
 
     public function getKeyword()

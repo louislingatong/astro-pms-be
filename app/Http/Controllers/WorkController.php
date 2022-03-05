@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateWorkRequest;
 use App\Http\Requests\SearchWorkRequest;
-use App\Http\Resources\WorkResource;
+use App\Http\Resources\VesselMachinerySubCategoryWorkResource;
 use App\Models\User;
 use App\Services\WorkService;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
@@ -42,9 +43,11 @@ class WorkController extends Controller
 
         try {
             $conditions = [
-                'vessel_id' => $request->getVesselId(),
-                'keyword' => $request->getKeyword(),
+                'vessel' => $request->getVessel(),
+                'department' => $request->getDepartment(),
+                'machinery' => $request->getMachinery(),
                 'status' => $request->getStatus(),
+                'keyword' => $request->getKeyword(),
                 'page' => $request->getPage(),
                 'limit' => $request->getLimit(),
             ];
@@ -75,14 +78,14 @@ class WorkController extends Controller
 
         try {
             $formData = [
-                'vessel_machinery_sub_category_id' => $request->getVesselMachinerySubCategoryId(),
-                'last_done' => $request->getLastDone(),
+                'vessel_machinery_sub_category_Ids' => $request->getVesselMachinerySubCategoryIds(),
+                'last_done' => Carbon::create($request->getLastDone()),
                 'instructions' => $request->getInstructions(),
                 'remarks' => $request->getRemarks(),
                 'creator_id' => $creator->getAttribute('id')
             ];
-            $job = $this->workService->create($formData);
-            $this->response['data'] = new WorkResource($job);
+            $works = $this->workService->create($formData);
+            $this->response['data'] = VesselMachinerySubCategoryWorkResource::collection($works);
         } catch (Exception $e) {
             $this->response = [
                 'error' => $e->getMessage(),

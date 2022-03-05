@@ -53,7 +53,15 @@ class RunningHourService
 
         $skip = ($page > 1) ? ($page * $limit - $limit) : 0;
 
-        $query = $this->vesselMachinery->where('vessel_id', '=', $conditions['vessel_id']);
+        $query = $this->vesselMachinery->whereHas('vessel', function ($q) use ($conditions) {
+            $q->where('name', '=', $conditions['vessel']);
+        });
+
+        if ($conditions['department']) {
+            $query = $query->whereHas('machinery.department', function ($q) use ($conditions) {
+                $q->where('name', '=', $conditions['department']);
+            });
+        }
 
         if ($conditions['keyword']) {
             $query = $query->search($conditions['keyword']);

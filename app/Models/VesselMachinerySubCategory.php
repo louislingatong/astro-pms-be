@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Log;
 
 class VesselMachinerySubCategory extends Model
 {
@@ -107,5 +109,30 @@ class VesselMachinerySubCategory extends Model
             });
     }
 
+    /**
+     * Creates a scope to search all vessel sub category by the provided status
+     *
+     * @param Builder $query
+     * @param string $status
+     * @return Builder
+     */
+    public function scopeSearchByStatus(Builder $query, string $status): Builder
+    {
+        $currentDate = Carbon::now();
+        if ($status === config('work.statuses.overdue')) {
+            $startOfDay = $currentDate->copy()->startOfDay();
+            return $query->where('due_date', '<', $startOfDay);
+        } else if ($status === config('work.statuses.due')) {
+            $startOfDay = $currentDate->copy()->startOfDay();
+            $endOfDay = $currentDate->copy()->endOfDay();
+            return $query->whereBetween('due_date', [$startOfDay, $endOfDay]);
+        } else if ($status === config('work.statuses.warning')) {
+            $warningDateFrom = $currentDate->copy()->endOfDay();
+            $warningDateTo = $warningDateFrom->copy()->addDays(config('work.warning_days'))->startOfDay();
+            return $query->whereBetween('due_date', [$warningDateFrom, $warningDateTo]);
+        } else {
+            return $query;
+        }
+    }
 
 }

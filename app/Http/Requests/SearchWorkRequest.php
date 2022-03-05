@@ -14,15 +14,23 @@ class SearchWorkRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'vessel_id' => [
+            'vessel' => [
                 'required',
-                'exists:vessels,id',
+                'exists:vessels,name',
             ],
-            'keyword' => 'nullable',
+            'department' => [
+                'nullable',
+                'exists:vessel_departments,name',
+            ],
+            'machinery' => [
+                'nullable',
+                'exists:machineries,name',
+            ],
             'status' => [
                 'nullable',
                 'in:' . implode(',', config('work.statuses')),
             ],
+            'keyword' => 'nullable',
             'page' => [
                 'nullable',
                 'numeric',
@@ -34,19 +42,29 @@ class SearchWorkRequest extends FormRequest
         ];
     }
 
-    public function getVesselId()
+    public function getVessel()
     {
-        return $this->input('vessel_id', null);
+        return $this->input('vessel', null);
     }
 
-    public function getKeyword()
+    public function getDepartment()
     {
-        return $this->input('keyword', '');
+        return $this->input('department', '');
+    }
+
+    public function getMachinery()
+    {
+        return $this->input('machinery', '');
     }
 
     public function getStatus()
     {
         return $this->input('status', '');
+    }
+
+    public function getKeyword()
+    {
+        return $this->input('keyword', '');
     }
 
     public function getPage()
