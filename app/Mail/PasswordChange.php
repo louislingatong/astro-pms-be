@@ -41,7 +41,7 @@ class PasswordChange extends Mailable
     public function build()
     {
         return $this->subject($this->subject)
-            ->markdown($this->view)
+            ->view($this->view)
             ->with([
                 'user' => $this->user,
                 'url' => $this->url,

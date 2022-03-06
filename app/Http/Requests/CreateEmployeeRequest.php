@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
 use App\Rules\EmailAddressRule;
 use App\Rules\PasswordRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateUserRequest extends FormRequest
+class CreateEmployeeRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -18,29 +17,34 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'first_name' => 'required',
+            'middle_name' => 'nullable',
             'last_name' => 'required',
             'email' => [
                 'required',
                 new EmailAddressRule,
-                'unique:users,email,' . $this->getId() . ',id',
+                'unique:users,email',
             ],
             'password' => [
-                'nullable',
+                'required',
                 new PasswordRule,
             ],
+            'department' => [
+                'required',
+                'exists:employee_departments,name',
+            ],
+            'id_number' => 'nullable',
+            'position' => 'nullable',
         ];
-    }
-
-    public function getId(): int
-    {
-        /** @var User $user */
-        $user = $this->route('user');
-        return $user->getAttribute('id');
     }
 
     public function getFirstName()
     {
         return $this->input('first_name', null);
+    }
+
+    public function getMiddleName()
+    {
+        return $this->input('middle_name', null);
     }
 
     public function getLastName()
@@ -58,8 +62,18 @@ class UpdateUserRequest extends FormRequest
         return $this->input('password', null);
     }
 
-    public function getAvatar()
+    public function getDepartment()
     {
-        return $this->file('avatar', null);
+        return $this->input('department', null);
+    }
+
+    public function getIdNumber()
+    {
+        return $this->input('id_number', null);
+    }
+
+    public function getPosition()
+    {
+        return $this->input('position', null);
     }
 }

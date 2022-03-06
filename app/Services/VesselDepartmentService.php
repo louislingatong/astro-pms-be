@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Http\Resources\RankResource;
+use App\Http\Resources\VesselDepartmentResource;
 use App\Models\VesselDepartment;
 
 class VesselDepartmentService
@@ -11,7 +11,7 @@ class VesselDepartmentService
     protected $vesselDepartment;
 
     /**
-     * RankService constructor.
+     * VesselDepartmentService constructor.
      *
      * @param VesselDepartment $vesselDepartment
      */
@@ -54,6 +54,6 @@ class VesselDepartmentService
 
         $urlParams = ['keyword' => $conditions['keyword'], 'limit' => $limit];
 
-        return paginated($results, RankResource::class, $page, $urlParams);
+        return paginated($results, VesselDepartmentResource::class, $page, $urlParams);
     }
 }

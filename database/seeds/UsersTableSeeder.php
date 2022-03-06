@@ -21,11 +21,11 @@ class UsersTableSeeder extends Seeder
         // create the system admin
         $this->_createSystemAdmin();
 
-        if (config('app.env') === 'local') {
-            factory(User::class, 20)->create([
-                'user_status_id' => $status->id
-            ]);
-        }
+//        if (config('app.env') === 'local') {
+//            factory(User::class, 20)->create([
+//                'user_status_id' => $status->id
+//            ]);
+//        }
     }
 
     private function _createSystemAdmin()

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exceptions\VesselNotFoundException;
 use App\Http\Resources\VesselResource;
 use App\Models\Vessel;
+use App\Models\VesselOwner;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -72,6 +73,8 @@ class VesselService
         DB::beginTransaction();
 
         try {
+            $vesselOwner = $this->findOrCreateVesselOwnerByName($params['owner']);
+            $params['vessel_owner_id'] = $vesselOwner->getAttribute('id');
             $vessel = $this->vessel->create($params);
 
             DB::commit();
@@ -94,6 +97,8 @@ class VesselService
      */
     public function update(array $params, Vessel $vessel): Vessel
     {
+        $vesselOwner = $this->findOrCreateVesselOwnerByName($params['owner']);
+        $params['vessel_owner_id'] = $vesselOwner->getAttribute('id');
         $vessel->update($params);
         return $vessel;
     }
@@ -112,5 +117,17 @@ class VesselService
         }
         $vessel->delete();
         return true;
+    }
+
+    /**
+     * Retrieve/Create the machinery maker
+     *
+     * @param string $name
+     * @return VesselOwner
+     * @throws
+     */
+    public function findOrCreateVesselOwnerByName(string $name): VesselOwner
+    {
+        return VesselOwner::firstOrCreate(['name' => $name]);
     }
 }

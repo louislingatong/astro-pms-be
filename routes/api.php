@@ -21,6 +21,9 @@ Route::prefix('profile')
 // register users routes
 Route::prefix('users')
     ->group(base_path('routes/api/users.php'));
+// register employees routes
+Route::prefix('employees')
+    ->group(base_path('routes/api/employees.php'));
 // register vessels routes
 Route::prefix('vessels')
     ->group(base_path('routes/api/vessels.php'));
@@ -68,3 +71,6 @@ Route::prefix('interval-units')
 // register ranks routes
 Route::prefix('ranks')
     ->group(base_path('routes/api/ranks.php'));
+// register employee departments routes
+Route::prefix('employee-departments')
+    ->group(base_path('routes/api/employee-departments.php'));

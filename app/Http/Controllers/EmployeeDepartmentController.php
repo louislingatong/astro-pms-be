@@ -2,38 +2,38 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\SearchVesselDepartmentRequest;
-use App\Services\VesselDepartmentService;
-use Exception;
+use App\Http\Requests\SearchEmployeeDepartmentRequest;
+use App\Services\EmployeeDepartmentService;
 use Illuminate\Http\JsonResponse;
+use Exception;
 
-class VesselDepartmentController extends Controller
+class EmployeeDepartmentController extends Controller
 {
-    /** @var VesselDepartmentService */
-    protected $vesselDepartmentService;
+    /** @var EmployeeDepartmentService */
+    protected $employeeDepartmentService;
 
     /**
-     * VesselDepartmentController constructor
+     * EmployeeDepartmentController constructor
      *
-     * @param VesselDepartmentService $vesselDepartmentService
+     * @param EmployeeDepartmentService $employeeDepartmentService
      */
-    public function __construct(VesselDepartmentService $vesselDepartmentService)
+    public function __construct(EmployeeDepartmentService $employeeDepartmentService)
     {
         parent::__construct();
 
-        $this->vesselDepartmentService = $vesselDepartmentService;
+        $this->employeeDepartmentService = $employeeDepartmentService;
 
         // enable api middleware
         $this->middleware(['auth:api']);
     }
 
     /**
-     * Retrieves the List of vessel department
+     * Retrieves the List of employees
      *
-     * @param SearchVesselDepartmentRequest $request
+     * @param SearchEmployeeDepartmentRequest $request
      * @return JsonResponse
      */
-    public function index(SearchVesselDepartmentRequest $request): JsonResponse
+    public function index(SearchEmployeeDepartmentRequest $request): JsonResponse
     {
         $request->validated();
 
@@ -43,7 +43,7 @@ class VesselDepartmentController extends Controller
                 'page' => $request->getPage(),
                 'limit' => $request->getLimit(),
             ];
-            $results = $this->vesselDepartmentService->search($conditions);
+            $results = $this->employeeDepartmentService->search($conditions);
             $this->response = array_merge($results, $this->response);
         } catch (Exception $e) {
             $this->response = [

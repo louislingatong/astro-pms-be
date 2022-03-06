@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Machinery extends Model
 {
+    use SoftDeletes;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -22,8 +24,6 @@ class Machinery extends Model
         'machinery_model_id',
         'machinery_maker_id',
     ];
-
-    use SoftDeletes;
 
     /**
      * Retrieves the department of the machinery

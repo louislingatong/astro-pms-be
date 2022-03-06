@@ -2,27 +2,26 @@
 
 namespace App\Services;
 
-use App\Http\Resources\VesselOwnerResource;
-use App\Models\VesselDepartment;
-use App\Models\VesselOwner;
+use App\Http\Resources\EmployeeDepartmentResource;
+use App\Models\EmployeeDepartment;
 
-class VesselOwnerService
+class EmployeeDepartmentService
 {
-    /** @var VesselOwner $vesselOwner */
-    protected $vesselOwner;
+    /** @var EmployeeDepartment $employeeDepartment */
+    protected $employeeDepartment;
 
     /**
-     * VesselOwnerService constructor.
+     * EmployeeDepartmentService constructor.
      *
-     * @param VesselOwner $vesselOwner
+     * @param EmployeeDepartment $employeeDepartment
      */
-    public function __construct(VesselOwner $vesselOwner)
+    public function __construct(EmployeeDepartment $employeeDepartment)
     {
-        $this->vesselOwner = $vesselOwner;
+        $this->employeeDepartment = $employeeDepartment;
     }
 
     /**
-     * List of vessel owners by conditions
+     * List of employee departments by conditions
      *
      * @param array $conditions
      * @return array
@@ -43,7 +42,7 @@ class VesselOwnerService
 
         $skip = ($page > 1) ? ($page * $limit - $limit) : 0;
 
-        $query = $this->vesselOwner;
+        $query = $this->employeeDepartment;
 
         if ($conditions['keyword']) {
             $query = $query->search($conditions['keyword']);
@@ -55,6 +54,6 @@ class VesselOwnerService
 
         $urlParams = ['keyword' => $conditions['keyword'], 'limit' => $limit];
 
-        return paginated($results, VesselOwnerResource::class, $page, $urlParams);
+        return paginated($results, EmployeeDepartmentResource::class, $page, $urlParams);
     }
 }
